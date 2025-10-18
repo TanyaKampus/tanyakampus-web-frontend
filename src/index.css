@@ -1,1 +1,55 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('./src/assets/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./src/assets/fonts/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./src/assets/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./src/assets/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 @import "tailwindcss";
+
+@theme {
+  --color-primary-100: #8CDEDE;
+  --color-primary-200: #52BEBE;
+  --color-primary-300: #069494;
+  --color-primary-400: #045959;
+  --color-primary-500: #022C2C;
+
+  --color-secondary-100: #FFE3D3;
+  --color-secondary-200: #FFC7A6;
+  --color-secondary-300: #FFA26B;
+  --color-secondary-400: #E0633D;
+  --color-secondary-500: #C44F2C;
+
+  --color-tertiary-100: #EBF3FB;
+  --color-tertiary-200: #C2D9F0;
+  --color-tertiary-300: #5B9DDE;
+  --color-tertiary-400: #3E73C4;
+  --color-tertiary-500: #285E9A;
+
+  --font-sans: "Poppins", sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+}
