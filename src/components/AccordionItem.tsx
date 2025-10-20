@@ -39,7 +39,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
         <div
           className="
-            flex-shrink-0 w-8 h-8 bg-pri rounded-full 
+            flex-shrink-0 w-8 h-8 bg-primary-300 rounded-full 
             flex items-center justify-center 
             transition-transform duration-300
           "

@@ -19,8 +19,8 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-4">
-      <div className="space-y-6 relative z-0">
+    <div className="w-full max-w-2xl mx-auto p-2">
+      <div className="space-y-3 relative z-0">
         {items.map(item => (
           <AccordionItem
             key={item.id}
