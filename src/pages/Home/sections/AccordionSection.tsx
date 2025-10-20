@@ -52,7 +52,7 @@ const AccordionSection = () => {
   ];
 
   return (
-    <section className="relative py-40 min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    <section className="relative py-42 mt-64 min-h-screen flex items-center justify-center p-4 overflow-hidden">
       <img
         src={BG}
         alt="Latar belakang abstrak"
