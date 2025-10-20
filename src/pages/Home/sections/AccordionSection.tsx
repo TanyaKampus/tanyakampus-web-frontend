@@ -6,7 +6,7 @@ const AccordionSection = () => {
   const accordionItems: AccordionData[] = [
     {
       id: "1",
-      title: "Kecerdasan & Kepintaran",
+      title: "Kecerdasan",
       content: (
         <p>
           Ini adalah konten untuk bagian Kecerdasan & Kepintaran. Anda bisa
@@ -16,7 +16,7 @@ const AccordionSection = () => {
     },
     {
       id: "2",
-      title: "Penolong & Pemandu",
+      title: "Penolong",
       content: (
         <p>
           Ini adalah konten untuk bagian Penolong & Pemandu. Penjelasan lebih
@@ -26,7 +26,7 @@ const AccordionSection = () => {
     },
     {
       id: "3",
-      title: "Kelulusan & Prestasi",
+      title: "Prestasi",
       content: (
         <ul className="space-y-2">
           <li className="list-disc ml-5">
@@ -52,7 +52,7 @@ const AccordionSection = () => {
   ];
 
   return (
-    <section className="relative py-72 min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    <section className="relative py-40 min-h-screen flex items-center justify-center p-4 overflow-hidden">
       <img
         src={BG}
         alt="Latar belakang abstrak"
