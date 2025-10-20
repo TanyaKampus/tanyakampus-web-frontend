@@ -52,15 +52,14 @@
   --font-sans: "Poppins", sans-serif;
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none; 
+* {
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none; 
+*::-webkit-scrollbar {
+  display: none;
 }
-
 
 body {
   font-family: var(--font-sans);
