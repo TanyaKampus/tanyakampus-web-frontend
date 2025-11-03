@@ -1,33 +1,38 @@
-import React from 'react';
+import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  label: string;     
-  variant?: 'solid' | 'outline' | 'solid-dark' | 'solid-light' | 'outline-dark';
-  className?: string; 
+  label: string;
+  variant?: "solid" | "outline" | "solid-dark" | "solid-light" | "outline-dark";
+  className?: string;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-  label, 
-  variant = 'solid-dark', 
-  className = '', 
-  ...rest 
+const Button: React.FC<ButtonProps> = ({
+  label,
+  variant = "solid-dark",
+  className = "",
+  startIcon,
+  endIcon,
+  ...rest
 }) => {
-  const baseClasses = 'cursor-pointer font-semibold px-5 py-3 rounded-lg transition-colors duration-200';
+  const baseClasses =
+    "cursor-pointer font-semibold px-5 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2";
 
   const getVariantClasses = (variant: string) => {
     switch (variant) {
-      case 'solid':
-        return 'border border-tertiary-100 font-semibold rounded-lg hover:bg-white hover:text-primary-300 transition-colors';
-      case 'outline':
-        return 'bg-transparent border border-white text-white hover:bg-white hover:text-primary-300';
-      case 'outline-dark':
-        return 'bg-transparent border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white';
-      case 'solid-light':
-        return 'bg-white text-primary-300 font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors';
-      case 'solid-dark  ':
-        return 'bg-primary-300 text-white hover:bg-primary-400';
+      case "solid":
+        return "border border-tertiary-100 font-semibold rounded-lg hover:bg-white hover:text-primary-300 transition-colors";
+      case "outline":
+        return "bg-transparent border border-white text-white hover:bg-white hover:text-primary-300";
+      case "outline-dark":
+        return "bg-transparent border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white";
+      case "solid-light":
+        return "bg-white text-primary-300 font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors";
+      case "solid-dark":
+        return "bg-primary-300 text-white hover:bg-primary-400";
       default:
-        return 'bg-primary-300 text-white hover:bg-primary-400';
+        return "bg-primary-300 text-white hover:bg-primary-400";
     }
   };
 
@@ -35,10 +40,11 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={`${baseClasses} ${variantClasses} ${className}`} {...rest}>
-      {label}
+      {startIcon && <span className="flex items-center">{startIcon}</span>}
+      <span>{label}</span>
+      {endIcon && <span className="flex items-center">{endIcon}</span>}
     </button>
   );
 };
 
 export default Button;
-
