@@ -1,63 +1,52 @@
-import React, { useState, useEffect } from "react";
+import { FaPlus, FaTimes } from "react-icons/fa";
 
 interface AccordionItemProps {
-  title: string;
-  children: React.ReactNode;
+  index: number;
+  question: string;
+  answer: string;
   isOpen: boolean;
   onToggle: () => void;
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
-  title,
-  children,
+  question,
+  answer,
   isOpen,
   onToggle,
 }) => {
-  const [isCollapsing, setIsCollapsing] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setIsCollapsing(true);
-      const timer = setTimeout(() => {
-        setIsCollapsing(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
-
   return (
-    <div className="w-full">
-      <button
-        onClick={onToggle}
-        className={`
-          flex items-center justify-between w-full p-3 bg-white cursor-pointer
-          shadow-md
-          ${isOpen || isCollapsing ? "rounded-t-2xl" : "rounded-full"}
-        `}
-      >
-        <span className="text-base font-semibold text-gray-800">{title}</span>
+    <div
+      onClick={onToggle}
+      className={`transition-all duration-500 ease-in-out rounded-2xl cursor-pointer ${
+        isOpen ? "bg-transparent shadow-md" : "bg-transparent"
+      }`}
+    >
+      <div className="flex items-center justify-between px-6 py-5">
+        <h3
+          className={`text-base font-semibold transition-colors duration-300 ${
+            isOpen ? "text-neutral" : "text-neutral"
+          }`}
+        >
+          {question}
+        </h3>
 
         <div
-          className="
-            flex-shrink-0 w-8 h-8 bg-primary-300 rounded-full 
-            flex items-center justify-center 
-            transition-transform duration-300
-          "
+          className={`bg-primary-300 w-10 h-10 rounded-full flex items-center justify-center text-white transform transition-transform duration-300 ${
+            isOpen ? "rotate-90" : "rotate-0"
+          }`}
         >
-          <span className="text-white text-xl cursor-pointer">
-            {isOpen ? "-" : "+"}
-          </span>
+          {isOpen ? <FaTimes size={14} /> : <FaPlus size={14} />}
         </div>
-      </button>
+      </div>
 
       <div
-        className={`
-          overflow-hidden bg-white shadow-md rounded-b-2xl
-          transition-all duration-300 ease-in-out
-          ${isOpen ? "max-h-96" : "max-h-0"}
-        `}
+        className={`overflow-hidden transition-all duration-500 ease-in-out px-6 ${
+          isOpen ? "max-h-60 pb-6" : "max-h-0"
+        }`}
       >
-        <div className="p-5 text-gray-700">{children}</div>
+        <p className="text-neutral text-base max-w-lg leading-relaxed whitespace-pre-line">
+          {answer}
+        </p>
       </div>
     </div>
   );
