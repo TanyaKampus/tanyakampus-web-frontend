@@ -43,8 +43,8 @@ const TestimonySection = () => {
   const getCardPosition = (index: number) => {
     const diff = index - currentIndex;
     if (diff === 0) return "center";
-    if (diff === 1 || diff === -(testimonies.length - 1)) return "bottom";
-    if (diff === -1 || diff === testimonies.length - 1) return "top";
+    if (diff === 1 || diff === -(testimonies.length - 1)) return "top";
+    if (diff === -1 || diff === testimonies.length - 1) return "bottom";
     return "hidden";
   };
 

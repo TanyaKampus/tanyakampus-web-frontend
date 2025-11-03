@@ -5,7 +5,7 @@ const GetStartedSection = () => {
   return (
     <div className="py-28">
       <div className="relative w-full h-[384px] bg-gradient-to-tr from-primary-200 to-primary-100 text-neutral-white overflow-hidden">
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 max-w-4xl flex flex-col gap-3">
+        <div className="absolute left-30 top-1/2 -translate-y-1/2 max-w-xl flex flex-col gap-3">
           <h1 className="text-4xl font-semibold">Yuk Mulai Petualanganmu!</h1>
           <p className="text-2xl max-w-xl">
             Gratis, cuma butuh 5 menit buat tahu jurusan impianmu!
