@@ -45,11 +45,11 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`md:hidden bg-cyan-700 text-tertiary-100 shadow-lg px-6 pb-4 space-y-4 overflow-hidden transition-all duration-500 ease-in-out
+          className={`md:hidden bg-primary-300 text-tertiary-100 shadow-lg px-6 pb-4 space-y-4 overflow-hidden transition-all duration-500 ease-in-out
             ${isMenuOpen ? "max-h-[500px] opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-3"}
           `}
         >
-          <ul className="flex flex-col space-y-4 font-medium pt-2">
+          <ul className="flex flex-col space-y-4 font-medium pt-4">
             <li><a href="/" onClick={() => setIsMenuOpen(false)}>Home</a></li>
             <li><a href="/about" onClick={() => setIsMenuOpen(false)}>Lorem</a></li>
             <li><a href="#" onClick={() => setIsMenuOpen(false)}>Lorem</a></li>

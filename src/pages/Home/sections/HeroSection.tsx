@@ -1,5 +1,6 @@
-import BG from "@/assets/images/HeroBG.png";
+import BG from "@/assets/images/HeroWave.png";
 import Button from "@/components/Button";
+import { RiWhatsappFill } from "react-icons/ri";
 
 const HeroSection = () => {
   return (
@@ -20,7 +21,11 @@ const HeroSection = () => {
         </p>
         <div className="flex gap-4 items-center justify-center">
           <Button label="Mulai Test" />
-          <Button label="Test Lainnya" variant="outline" />
+          <Button
+            label="Konsultasi Sekarang"
+            variant="outline"
+            startIcon={<RiWhatsappFill size={24} />}
+          />
         </div>
       </div>
     </div>
