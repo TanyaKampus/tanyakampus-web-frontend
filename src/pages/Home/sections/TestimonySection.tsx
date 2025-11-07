@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TestimonyCard from "../components/TestimonyCard";
 import { RiUser2Fill } from "react-icons/ri";
-import Ellipse from "@/assets/images/Ellipse Group.png";
+import Vector from "@/assets/images/TestiVector.png";
 
 const TestimonySection = () => {
   const testimonies = [
@@ -49,16 +49,16 @@ const TestimonySection = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden py-40 px-6 sm:px-10">
+    <div className="min-h-screen relative overflow-hidden py-28 px-6 sm:px-10">
       <img
-        src={Ellipse}
-        alt="Decorative Ellipse"
-        className="absolute left-0 top-1/2 -translate-y-1/2 w-[300px] md:w-[400px] opacity-80 animate-fadeIn"
+        src={Vector}
+        alt="Vector"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70 pointer-events-none"
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="space-y-4 z-10 px-4 w-100">
+          <div className="space-y-4 z-10 px-4">
             <h1 className="text-4xl font-bold text-neutral leading-tight">
               Sudah Tahu Arah Mereka, Sekarang Giliran Kamu!
             </h1>

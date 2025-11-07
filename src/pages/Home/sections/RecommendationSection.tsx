@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import CampusCard, { type CampusCardProps } from "@/components/CampusCard";
 import { campuses } from "@/data/campuses";
-import Vector from "@/assets/images/VectorRecommendation.png";
+import Vector from "@/assets/images/RecomVector.png";
 import { useNavigate } from "react-router-dom";
 
 const SLIDE_INTERVAL = 4000;
@@ -14,7 +14,7 @@ const RecommendationSection = () => {
   const [isFading, setIsFading] = useState(false);
 
   const handleButtonClick = () => {
-    navigate('/rekomendasi-kampus')
+    navigate('/kategori-kampus')
   }
 
   useEffect(() => {
@@ -38,11 +38,11 @@ const RecommendationSection = () => {
   );
 
   return (
-    <section className="relative px-6 md:px-16 lg:px-32 py-72 overflow-hidden">
+    <section className="relative px-6 md:px-16 lg:px-32 mt-72 overflow-hidden">
       <img
         src={Vector}
         alt="Vector"
-        className="absolute left-0 top-[40%] -translate-y-1/2 pointer-events-none"
+        className="absolute left-0 h-[450px] top-[50%] -translate-y-1/2 pointer-events-none"
       />
 
       <div className="container mx-auto relative z-10">
