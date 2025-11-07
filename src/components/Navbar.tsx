@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   FiMenu,
   FiX,
@@ -13,14 +13,19 @@ import MobileMenu from "./MobileMenu";
 const Navbar = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const navigate = useNavigate();
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const handleLoginButton = () => {
+    navigate('/login')
+  }
+
   const navClass = isHomePage
     ? "absolute top-0 left-0 w-full z-20 bg-transparent text-tertiary-100"
-    : "relative w-full z-20 bg-cyan-700 text-tertiary-100 shadow-md";
+    : "relative w-full z-20 bg-gradient-to-tr from-primary-300 to-primary-200 text-tertiary-100 shadow-sm";
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -47,7 +52,7 @@ const Navbar = () => {
             <Button
               label="Masuk"
               variant="outline"
-              onClick={() => setIsLoginOpen(true)}
+              onClick={handleLoginButton}
             />
           </div>
         </div>

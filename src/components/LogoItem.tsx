@@ -5,7 +5,7 @@ const LogoItem = () => {
   return (
     <Link to="/" className="flex gap-2 items-center">
       <img src={LuluLogo} className="h-[40px] w-[40px]" />
-      <h1 className="text-xl font-bold">TanyaKampus</h1>
+      <h1 className="text-xl font-bold text-neutral-white">TanyaKampus</h1>
     </Link>
   );
 };

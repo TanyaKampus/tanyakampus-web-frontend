@@ -3,13 +3,19 @@ import Button from "@/components/Button";
 import CampusCard, { type CampusCardProps } from "@/components/CampusCard";
 import { campuses } from "@/data/campuses";
 import Vector from "@/assets/images/VectorRecommendation.png";
+import { useNavigate } from "react-router-dom";
 
 const SLIDE_INTERVAL = 4000;
 const FADE_DURATION = 500;
 
 const RecommendationSection = () => {
+  const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+
+  const handleButtonClick = () => {
+    navigate('/rekomendasi-kampus')
+  }
 
   useEffect(() => {
     if (campuses.length <= 3) return;
@@ -54,6 +60,7 @@ const RecommendationSection = () => {
             label="Cari kampus lainnya"
             variant="outline-dark"
             className="mt-6 md:mt-0"
+            onClick={handleButtonClick}
           />
         </div>
 
