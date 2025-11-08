@@ -2,9 +2,11 @@ import Lulu from "@/assets/images/LuluBodas.png";
 import Vector from "@/assets/images/VectorLogin.png";
 import Button from "@/components/Button";
 import LogoItem from "@/components/LogoItem";
+import ButtonRg from "@/assets/images/Button.png";
 import BubbleKiri from "@/assets/images/Bubble.png";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="relative flex-1 bg-gradient-to-b from-primary-200 to-primary-100 flex flex-col justify-center items-center overflow-hidden">
@@ -26,12 +28,25 @@ const Login = () => {
       </div>
 
       <div className="flex-1 flex flex-col justify-center items-center pt-2">
-        <div className="max-w-md w-full">
-          <h1 className="text-2xl font-bold text-neutral text-center mb-2">
-            Yuk masuk dulu!
+        <div className="max-w-md w-full -mt-29">
+          <Link to="/login">
+            <button className="flex items-center gap-3">
+              <img
+                src={ButtonRg}
+                alt="Kembali ke login"
+                className="w-12 h-40 object-contain cursor-pointer"
+              />
+              <h1 className="text-[20px] font-bold text-neutral text-center">
+                Sudah Punya Akun
+              </h1>
+            </button>
+          </Link>
+          <h1 className="text-[24px] font-bold text-neutral text-left">
+            Yuk Daftar Dulu!
           </h1>
-          <p className="text-center text-neutral mb-6">
-            Temukan jurusan dan kampus terbaik sesuai kepribadianmu.
+          <p className="text-left text-neutral mb-6">
+            Biar kamu bisa temukan jurusan dan kampus terbaik sesuai
+            kepribadianmu.
           </p>
 
           <form className="space-y-4">
@@ -43,38 +58,16 @@ const Login = () => {
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                placeholder="Masukan Password kamu"
-                className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              <div className="flex justify-between items-center text-sm mt-1">
-                <label className="flex items-center gap-1">
-                  <input type="checkbox" className="accent-teal-600" />
-                  Ingatkan saya
-                </label>
-                <a href="#" className="text-neutral hover:underline">
-                  Lupa Password?
-                </a>
+            <div className="flex items-center gap-2 mt-2 text-sm text-neutral">
+              <div className="w-4 h-4 flex items-center justify-center rounded-full bg-neutral text-white text-xs font-bold">
+                i
               </div>
+              <span>Pastikan email kamu sudah benar</span>
             </div>
 
-            <Button label="Masuk" variant="solid-dark" className="w-full" />
-
-            <p className="text-center text-sm mt-4">
-              Belum punya akun?{" "}
-              <a
-                href="/daftar"
-                className="text-tertiary-300 font-semibold hover:underline"
-              >
-                Daftar Sekarang
-              </a>
-            </p>
+            <Link to="/identitas" className="w-full">
+              <Button label="Lanjut" variant="solid-dark" className="w-full" />
+            </Link>
 
             <div className="flex items-center my-4">
               <div className="flex-1 h-px bg-neutral" />
@@ -94,7 +87,8 @@ const Login = () => {
               Login dengan Google
             </button>
           </form>
-                    <img
+
+          <img
             src={BubbleKiri}
             alt="Bubble kanan bawah"
             className="fixed right-0 bottom-0 w-[200px] object-contain z-10"
@@ -105,4 +99,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
