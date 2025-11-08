@@ -6,6 +6,7 @@ import LuluIjo from "@/assets/images/LuluIjo.png";
 import LuluHappy from "@/assets/images/LuluHappy1.png";
 import BubbleKanan from "@/assets/images/Bubblekn.png";
 import BubbleKiri from "@/assets/images/Bubblest.png";
+import { Link } from "react-router-dom";
 
 const Succes = () => {
   return (
@@ -38,14 +39,14 @@ const Succes = () => {
           Sekarang kamu bisa mulai kenalin diri dan temukan jurusan serta kampus
           yang paling cocok buat kamu.
         </p>
-
-        <Button
-          label="Selamat Datang di TanyaKampus"
-          variant="solid-dark"
-          className="w-full mt-4"
-        />
+        <Link to="/login" className="w-full">
+          <Button
+            label="Selamat Datang di TanyaKampus"
+            variant="solid-dark"
+            className="w-full mt-4"
+          />
+        </Link>
       </div>
-
 
       <div className="absolute bottom-0 w-full">
         <img
