@@ -138,7 +138,9 @@ const Identitas = () => {
               </div>
             </div>
 
-            <Button label="Daftar" variant="solid-dark" className="w-full" />
+            <Link to="/succes" className="w-full">
+              <Button label="Daftar" variant="solid-dark" className="w-full" />
+            </Link>
           </form>
 
           <img

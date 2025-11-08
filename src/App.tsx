@@ -5,6 +5,7 @@ import CampusCategory from "./pages/CampusCategory/CampusCategory";
 import Login from "./pages/Login";
 import Daftar from "./pages/Register";
 import Identitas from "./pages/Register/Identitas";
+import Succes from "./pages/Register/Succes";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/daftar" element={<Daftar />} />
           <Route path="/identitas" element={<Identitas />} />
+          <Route path="/succes" element={<Succes />} />
         </Route>
       </Routes>
     </BrowserRouter>
