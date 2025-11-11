@@ -4,9 +4,15 @@ import Button from "@/components/Button";
 import LogoItem from "@/components/LogoItem";
 import ButtonRg from "@/assets/images/Button.png";
 import BubbleKiri from "@/assets/images/Bubble.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const handleBackButton = () => {
+    navigate(-1)
+  }
+  
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="relative flex-1 bg-gradient-to-b from-primary-200 to-primary-100 flex flex-col justify-center items-center overflow-hidden">
@@ -29,8 +35,7 @@ const Register = () => {
 
       <div className="flex-1 flex flex-col justify-center items-center pt-2">
         <div className="max-w-md w-full -mt-29">
-          <Link to="/login">
-            <button className="flex items-center gap-3">
+            <button className="flex items-center gap-3" onClick={handleBackButton}>
               <img
                 src={ButtonRg}
                 alt="Kembali ke login"
@@ -40,7 +45,6 @@ const Register = () => {
                 Sudah Punya Akun
               </h1>
             </button>
-          </Link>
           <h1 className="text-[24px] font-bold text-neutral text-left">
             Yuk Daftar Dulu!
           </h1>

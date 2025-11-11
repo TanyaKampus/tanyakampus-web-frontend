@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  FiMenu,
-  FiX,
-} from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
 import Button from "./Button";
 import LogoItem from "./LogoItem";
 import LoginModal from "./LoginModal";
@@ -20,12 +17,16 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLoginButton = () => {
-    navigate('/login')
-  }
+    navigate("/login");
+  };
+
+  const handleDaftarButton = () => {
+    navigate("/daftar");
+  };
 
   const navClass = isHomePage
     ? "absolute top-0 left-0 w-full z-20 bg-transparent text-tertiary-100"
-    : "relative w-full z-20 bg-gradient-to-tr from-primary-300 to-primary-200 text-tertiary-100 shadow-sm";
+    : "relative w-full z-20 bg-gradient-to-tr from-primary-200 to-primary-100 text-tertiary-100 shadow-sm";
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -48,7 +49,11 @@ const Navbar = () => {
           />
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button label="Daftar" variant="solid-light" />
+            <Button
+              label="Daftar"
+              variant="solid-light"
+              onClick={handleDaftarButton}
+            />
             <Button
               label="Masuk"
               variant="outline"
