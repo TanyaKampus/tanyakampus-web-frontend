@@ -12,7 +12,7 @@ const HeroSection = () => {
       />
 
       <div className="relative z-10 text-center px-10">
-        <h1 className="text-4xl md:text-5xl font-bold max-w-2xl mb-6">
+        <h1 className="text-6xl font-bold max-w-3xl mb-6">
           Jelajahi Laut Pertamamu Sekarang!
         </h1>
         <p className="text-lg md:text-xl max-w-xl mx-auto mb-6">

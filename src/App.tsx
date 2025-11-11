@@ -13,7 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/rekomendasi-kampus" element={<CampusCategory />} />
+          <Route path="/kategori-kampus" element={<CampusCategory />} />
+          <Route path='/kategori-jurusan' element={<RekomendasiJurusan />} />
           <Route path="/login" element={<Login />} />
           <Route path="/daftar" element={<Daftar />} />
           <Route path="/identitas" element={<Identitas />} />

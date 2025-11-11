@@ -37,7 +37,7 @@ const TestimonyCard: React.FC<TestimonyCardProps> = ({
         />
 
         <div
-          className={`bg-transparent rounded-2xl p-4 relative z-10 overflow-visible ${borderClass}`}
+          className={`bg-neutral-white rounded-2xl p-4 relative z-10 overflow-visible ${borderClass}`}
         >
           <div className="flex items-start gap-4 mb-6 mt-2">
             <div className="w-16 h-16 bg-gradient-to-br from-primary-200 to-primary-300 rounded-full flex items-center justify-center text-3xl shadow-lg">
