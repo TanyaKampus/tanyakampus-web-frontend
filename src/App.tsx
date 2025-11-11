@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Daftar from "./pages/Register";
 import Identitas from "./pages/Register/Identitas";
 import Succes from "./pages/Register/Succes";
+import RekomendasiJurusan from "./pages/RekomendasiJurusan/RekomendasiJurusan";
 
 function App() {
   return (
