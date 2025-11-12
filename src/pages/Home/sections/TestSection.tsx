@@ -48,11 +48,10 @@ const TestSection = () => {
         className="hidden md:block absolute top-0 right-[250px] h-[450px] w-[450px] object-contain pointer-events-none z-0"
       />
 
-      {/* Penyelam di belakang card */}
       <img
         src={Penyelam}
         alt="Penyelam"
-        className="hidden md:block absolute right-24 top-0 w-[220px] object-contain z-0"
+        className="hidden md:block absolute right-34 -top-3 w-[220px] object-contain z-0"
       />
 
       {/* Text Section */}
@@ -67,7 +66,6 @@ const TestSection = () => {
         <Button label="Lihat Tes Lainnya" variant="outline-dark" />
       </div>
 
-      {/* Card Section */}
       <div className="relative flex-1 flex items-center justify-center z-10">
         <div
           className={`w-full max-w-sm bg-white rounded-2xl shadow-lg p-4 flex flex-col justify-between h-[480px] transition-opacity duration-500 ${
@@ -103,7 +101,6 @@ const TestSection = () => {
           />
         </div>
 
-        {/* Dots Indicator */}
         <div className="absolute right-[40px] top-1/2 -translate-y-1/2 flex flex-col gap-2">
           {cards.map((_, i) => (
             <button
