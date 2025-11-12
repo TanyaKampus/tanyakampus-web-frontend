@@ -11,7 +11,7 @@ const Footer = () => {
         className="absolute -top-20 right-0 w-[260px] pointer-events-none"
       />
 
-      <footer className="w-full py-6 px-8 bg-gradient-to-tr from-primary-300 to-primary-100 flex items-center justify-between text-neutral-white text-sm">
+      <footer className="w-full py-6 px-8 bg-gradient-to-tr from-primary-200 via-primary-200 to-primary-100 flex items-center justify-between text-neutral-white text-sm">
         <LogoItem />
 
         <div className="flex flex-col items-center">

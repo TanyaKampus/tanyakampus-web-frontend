@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import Button from "./Button";
@@ -15,6 +15,7 @@ const Navbar = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleLoginButton = () => {
     navigate("/login");
@@ -24,18 +25,38 @@ const Navbar = () => {
     navigate("/daftar");
   };
 
-  const navClass = isHomePage
-    ? "absolute top-0 left-0 w-full z-20 bg-transparent text-tertiary-100"
-    : "relative w-full z-20 bg-gradient-to-tr from-primary-200 to-primary-100 text-tertiary-100 shadow-sm";
+  // ✅ Deteksi scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navClass = `
+    fixed top-0 left-0 w-full z-50 transition-all duration-500
+    ${isHomePage
+      ? isScrolled
+        ? "bg-gradient-to-r from-primary-200 via-primary-200 to-primary-100 text-white shadow-xs"
+        : "text-white"
+      : "bg-gradient-to-r from-primary-200 via-primary-200 to-primary-100 text-white"}
+  `;
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
     <>
-      <nav className={`${navClass} transition-all`}>
+      <nav className={navClass}>
         <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
           <LogoItem />
+
+          {/* tombol menu untuk mobile */}
           <button
             className="md:hidden text-2xl focus:outline-none"
             onClick={toggleMenu}

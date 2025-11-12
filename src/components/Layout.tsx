@@ -12,7 +12,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {!shouldHideLayout && <Navbar />}
-      <main className="flex-grow">
+      <main className={`flex-grow ${!shouldHideLayout ? "pt-20" : ""}`}>
         <Outlet />
       </main>
       {!shouldHideLayout && <Footer />}

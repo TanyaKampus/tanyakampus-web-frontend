@@ -54,9 +54,10 @@ const FilterDropdown = ({ filters, onChange }: FilterDropdownProps) => {
         }`}
       >
         <div className="p-4">
-          <div className="bg-yellow-300 text-neutral-800 font-semibold shadow-sm text-sm px-3 py-1.5 rounded inline-block mb-4">
+          <div className="bg-yellow-300 text-neutral font-medium shadow-sm text-sm px-3 py-1.5 rounded inline-block mb-4">
             Filter
           </div>
+          <div className="border-1 border-neutral mb-10"></div>
 
           <FilterSection
             title="Jenis Kampus"
