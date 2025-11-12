@@ -3,19 +3,20 @@ import Button from "@/components/Button";
 import CampusCard, { type CampusCardProps } from "@/components/CampusCard";
 import { campuses } from "@/data/campuses";
 import Vector from "@/assets/images/RecomVector.png";
+import KuraKura from "@/assets/images/KuraKura.png";
 import { useNavigate } from "react-router-dom";
 
 const SLIDE_INTERVAL = 4000;
 const FADE_DURATION = 500;
 
 const RecommendationSection = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
   const handleButtonClick = () => {
-    navigate('/kategori-kampus')
-  }
+    navigate("/tanya-kampus");
+  };
 
   useEffect(() => {
     if (campuses.length <= 3) return;
@@ -43,6 +44,12 @@ const RecommendationSection = () => {
         src={Vector}
         alt="Vector"
         className="absolute left-0 h-[450px] top-[50%] -translate-y-1/2 pointer-events-none"
+      />
+
+      <img
+        src={KuraKura}
+        alt="Kura Kura"
+        className="hidden md:block absolute left-0 -bottom-1 object-contain z-0 w-[150px]"
       />
 
       <div className="container mx-auto relative z-10">

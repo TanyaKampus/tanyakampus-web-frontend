@@ -17,8 +17,8 @@ interface DropdownItem {
 }
 
 const campusDropdown: DropdownItem[] = [
-  { label: "Tanya Kampus", icon: <FaUniversity />, href: "#" },
-  { label: "Tanya Jurusan", icon: <RiGraduationCapFill />, href: "#" },
+  { label: "Tanya Kampus", icon: <FaUniversity />, href: "/tanya-kampus" },
+  { label: "Tanya Jurusan", icon: <RiGraduationCapFill />, href: "/tanya-jurusan" },
 ];
 
 const DesktopMenu: React.FC<DesktopMenuProps> = ({

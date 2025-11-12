@@ -49,7 +49,7 @@ const TestimonySection = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden py-28 px-6 sm:px-10">
+    <div className="min-h-screen relative overflow-hidden py-88 px-6 sm:px-10">
       <img
         src={Vector}
         alt="Vector"
@@ -59,7 +59,7 @@ const TestimonySection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="space-y-4 z-10 px-4">
-            <h1 className="text-4xl font-bold text-neutral leading-tight">
+            <h1 className="text-4xl max-w-md font-bold text-neutral leading-tight">
               Sudah Tahu Arah Mereka, Sekarang Giliran Kamu!
             </h1>
             <p className="text-lg md:text-xl text-neutral max-w-md">

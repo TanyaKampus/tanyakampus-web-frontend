@@ -2,6 +2,7 @@ import { useState } from "react";
 import AccordionItem from "@/components/AccordionItem"; 
 import { faqs } from "@/data/faqs";
 import Vector from '@/assets/images/AccordionVector.png';
+import LaukBiru from '@/assets/images/LaukBiru.png';
 
 const AccordionSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -16,6 +17,12 @@ const AccordionSection = () => {
         src={Vector}
         alt="Decorative Vector"
         className="absolute bottom-0 left-0 h-[450px] pointer-events-none"
+      />
+
+            <img
+        src={LaukBiru}
+        alt="Cumi"
+        className="absolute top-10 right-0 w-[280px] z-0 pointer-events-none object-cover"
       />
 
       <h1 className="text-2xl max-w-lg font-bold text-center text-neutral mb-3 z-10">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "@/components/Button";
 import JurusanTabs from "../components/JurusanTabs";
 import JurusanCard from "../components/JurusanCard";
@@ -9,9 +9,7 @@ import Vector from "@/assets/images/JurusanVector.png";
 const RekomendasiJurusanSection = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const jurusanList = dataJurusan[activeTab];
-  const navigate = useNavigate();
 
-  const handleButtonClick = () => navigate("/kategori-jurusan");
 
   return (
     <section className="relative overflow-hidden px-16 py-28 text-center">
@@ -43,12 +41,13 @@ const RekomendasiJurusanSection = () => {
         </div>
 
         <div className="mt-10">
+          <Link to={'/tanya-jurusan'}>
           <Button
             label="Cari Jurusan Lainnya"
             variant="outline-dark"
             className="m-auto"
-            onClick={handleButtonClick}
           />
+          </Link>
         </div>
       </div>
     </section>

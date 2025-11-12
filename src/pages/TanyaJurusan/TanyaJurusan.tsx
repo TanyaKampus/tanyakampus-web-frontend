@@ -6,7 +6,7 @@ import HeroSection from "./HeroSection";
 import FilterDropdown from "./components/FilterDropdown";
 import type { Filters } from "./components/types";
 
-const RekomendasiJurusan = () => {
+const TanyaJurusan = () => {
   const allMajors = Object.values(dataJurusan).flat();
   const [filters, setFilters] = useState<Filters>({
     jenisKampus: "",
@@ -43,4 +43,4 @@ const RekomendasiJurusan = () => {
   );
 };
 
-export default RekomendasiJurusan;
+export default TanyaJurusan;
