@@ -8,6 +8,8 @@ import Succes from "./pages/Authentication/Register/Succes";
 import NotFoundPage from "./pages/NotFoundPage";
 import TanyaKampus from "./pages/TanyaKampus/TanyaKampus";
 import TanyaJurusan from "./pages/TanyaJurusan/TanyaJurusan";
+import CategoryTest from "./pages/CategoryTest/CategoryTest";
+import CekarusMinat from "./pages/CategoryTest/CekarusMinat";
 
 function App() {
   return (
@@ -15,6 +17,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path="/category-test">
+            <Route index element={<CategoryTest />} />
+            <Route path="cekarus-minat" element={<CekarusMinat />} />
+          </Route>
           <Route path="/tanya-kampus" element={<TanyaKampus />} />
           <Route path="/tanya-jurusan" element={<TanyaJurusan />} />
           <Route path="/login" element={<Login />} />
