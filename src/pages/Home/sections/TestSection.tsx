@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import ArusMinat from "@/assets/images/ArusMinat.png";
 import SelamDalam from "@/assets/images/SelamDalam.png";
@@ -25,6 +26,7 @@ const cards = [
 ];
 
 const TestSection = () => {
+  const navigate = useNavigate(); // hook navigate
   const [activeIndex, setActiveIndex] = useState(0);
   const [fade, setFade] = useState(true);
 
@@ -38,6 +40,14 @@ const TestSection = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleLihatTes = () => {
+    navigate("/category-test"); // tombol "Lihat Tes Lainnya"
+  };
+
+  const handleMulaiCekOmbak = () => {
+    navigate("/category-test/cekarus-minat"); // tombol "Mulai Cek Ombak"
+  };
 
   return (
     <section className="relative flex flex-col md:flex-row items-center justify-between gap-10 py-28 px-10 md:px-26 overflow-hidden">
@@ -63,9 +73,14 @@ const TestSection = () => {
           Lautan pilihan itu luas. Gunakan alat navigasi kami untuk memetakan
           rute jurusan dan karir yang paling tepat buatmu.
         </p>
-        <Button label="Lihat Tes Lainnya" variant="outline-dark" />
+        <Button
+          label="Lihat Tes Lainnya"
+          variant="outline-dark"
+          onClick={handleLihatTes}
+        />
       </div>
 
+      {/* Card Section */}
       <div className="relative flex-1 flex items-center justify-center z-10">
         <div
           className={`w-full max-w-sm bg-white rounded-2xl shadow-lg p-4 flex flex-col justify-between h-[480px] transition-opacity duration-500 ${
@@ -98,9 +113,11 @@ const TestSection = () => {
             label="Mulai Cek Ombak"
             variant="solid-dark"
             className="w-full mt-4"
+            onClick={handleMulaiCekOmbak} // arah ke CekarusMinat
           />
         </div>
 
+        {/* Dots */}
         <div className="absolute right-[40px] top-1/2 -translate-y-1/2 flex flex-col gap-2">
           {cards.map((_, i) => (
             <button
@@ -113,9 +130,7 @@ const TestSection = () => {
                 }, 300);
               }}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                i === activeIndex
-                  ? "bg-primary-300 scale-125"
-                  : "bg-[#D9D9D9]"
+                i === activeIndex ? "bg-primary-300 scale-125" : "bg-[#D9D9D9]"
               }`}
             />
           ))}
