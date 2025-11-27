@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import HeroSection from "./HeroSection";
 import FilterDropdown from "./components/FilterDropdown";
 import type { Filters } from "./components/types";
-import KampusCard from "../Home/components/KampusCard";
+import KampusCard from "@/pages/Home/components/KampusCard";
 
 const TanyaKampus = () => {
   const allMajors = Object.values(dataKampus).flat();
@@ -29,7 +29,7 @@ const TanyaKampus = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
           {allMajors.map((kampus) => (
-            <KampusCard key={kampus.name} Kampus={kampus} />
+            <KampusCard key={kampus.id} kampus={kampus} />
           ))}
         </div>
 
