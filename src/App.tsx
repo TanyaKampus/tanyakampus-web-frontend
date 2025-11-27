@@ -7,6 +7,7 @@ import Identitas from "./pages/Authentication/Register/Identitas";
 import Succes from "./pages/Authentication/Register/Succes";
 import NotFoundPage from "./pages/NotFoundPage";
 import TanyaKampus from "./pages/TanyaKampus/TanyaKampus";
+import DetailKampus from "./pages/TanyaKampus/DetailKampus"; 
 import TanyaJurusan from "./pages/TanyaJurusan/TanyaJurusan";
 
 function App() {
@@ -15,13 +16,20 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/tanya-kampus" element={<TanyaKampus />} />
-          <Route path="/tanya-jurusan" element={<TanyaJurusan />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/daftar" element={<Daftar />} />
-          <Route path="/identitas" element={<Identitas />} />
-          <Route path="/succes" element={<Succes />} />
+
+          {/* Tanya Kampus */}
+          <Route path="tanya-kampus">
+            <Route index element={<TanyaKampus />} />
+            <Route path=":id" element={<DetailKampus />} /> {/* detail kampus */}
+          </Route>
+
+          <Route path="tanya-jurusan" element={<TanyaJurusan />} />
+          <Route path="login" element={<Login />} />
+          <Route path="daftar" element={<Daftar />} />
+          <Route path="identitas" element={<Identitas />} />
+          <Route path="succes" element={<Succes />} />
         </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
