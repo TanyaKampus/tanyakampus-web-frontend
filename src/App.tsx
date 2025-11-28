@@ -9,6 +9,9 @@ import NotFoundPage from "./pages/NotFoundPage";
 import TanyaKampus from "./pages/TanyaKampus/TanyaKampus";
 import DetailKampus from "./pages/TanyaKampus/DetailKampus"; 
 import TanyaJurusan from "./pages/TanyaJurusan/TanyaJurusan";
+import CategoryTest from "./pages/CategoryTest/CategoryTest";
+import CekarusMinat from "./pages/CategoryTest/CekarusMinat";
+// import Test from "./pages/CategoryTest/Test";
 
 function App() {
   return (
@@ -16,6 +19,22 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path="/category-test">
+            <Route index element={<CategoryTest />} />
+
+            {/* Cekarus Minat */}
+            <Route path="cekarus-minat" element={<CekarusMinat />}>
+              {/* Test sebagai nested route */}
+              {/* <Route path="test" element={<Test />} /> */}
+            </Route>
+          </Route>
+          {/* <Route path="test" element={<Test />} /> */}
+          <Route path="/tanya-kampus" element={<TanyaKampus />} />
+          <Route path="/tanya-jurusan" element={<TanyaJurusan />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/daftar" element={<Daftar />} />
+          <Route path="/identitas" element={<Identitas />} />
+          <Route path="/succes" element={<Succes />} />
 
           {/* Tanya Kampus */}
           <Route path="tanya-kampus">
