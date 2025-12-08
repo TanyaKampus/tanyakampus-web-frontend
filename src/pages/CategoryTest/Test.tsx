@@ -36,7 +36,7 @@ const Test = () => {
       <div className="absolute top-20 left-[71rem] right-6 md:right-16 z-20">
         <button
           onClick={handleExit}
-          className="bg-[#CF1F1F] text-white px-6 py-2 rounded-lg text-lg font-semibold"
+          className="bg-[#CF1F1F] cursor-pointer text-white px-6 py-2 rounded-lg text-lg font-semibold"
         >
           Keluar
         </button>

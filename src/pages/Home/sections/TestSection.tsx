@@ -46,7 +46,7 @@ const TestSection = () => {
   };
 
   const handleMulaiCekOmbak = () => {
-    navigate("/category-test/cekarus-minat"); // tombol "Mulai Cek Ombak"
+    navigate("/category-test/cek-arus-minat"); // tombol "Mulai Cek Ombak"
   };
 
   return (

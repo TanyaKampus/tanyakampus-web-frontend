@@ -18,7 +18,7 @@ const TestCard: React.FC<TestCardProps> = ({ test }) => {
     
   
   const handleCardClick = () => {
-    navigate("/category-test/cekarus-minat"); 
+    navigate("/category-test/cek-arus-minat"); 
   };
     
   

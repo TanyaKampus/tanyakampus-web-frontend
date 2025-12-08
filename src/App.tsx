@@ -11,7 +11,13 @@ import DetailKampus from "./pages/TanyaKampus/DetailKampus";
 import TanyaJurusan from "./pages/TanyaJurusan/TanyaJurusan";
 import CategoryTest from "./pages/CategoryTest/CategoryTest";
 import CekarusMinat from "./pages/CategoryTest/CekarusMinat";
-// import Test from "./pages/CategoryTest/Test";
+
+import ProfileLayout from "./pages/Profile/components/ProfileLayout";
+import ProfileRiwayatTes from "./pages/Profile/ProfileRiwayatTes";
+import ProfileFavoritJurusan from "./pages/Profile/ProfileFavoritJurusan";
+import ProfileFavoritKampus from "./pages/Profile/ProfileFavoritKampus";
+import ProfileFavoritMentor from "./pages/Profile/ProfileFavoritMentor";
+import ProfileIndex from "./pages/Profile";
 
 function App() {
   return (
@@ -19,34 +25,36 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/category-test">
+
+          <Route path="category-test">
             <Route index element={<CategoryTest />} />
-
-            {/* Cekarus Minat */}
-            <Route path="cekarus-minat" element={<CekarusMinat />}>
-              {/* Test sebagai nested route */}
-              {/* <Route path="test" element={<Test />} /> */}
-            </Route>
+            <Route path="cek-arus-minat" element={<CekarusMinat />} />
           </Route>
-          {/* <Route path="test" element={<Test />} /> */}
-          <Route path="/tanya-kampus" element={<TanyaKampus />} />
-          <Route path="/tanya-jurusan" element={<TanyaJurusan />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/daftar" element={<Daftar />} />
-          <Route path="/identitas" element={<Identitas />} />
-          <Route path="/succes" element={<Succes />} />
 
-          {/* Tanya Kampus */}
           <Route path="tanya-kampus">
             <Route index element={<TanyaKampus />} />
-            <Route path=":id" element={<DetailKampus />} /> {/* detail kampus */}
+            <Route path=":id" element={<DetailKampus />} />
           </Route>
 
           <Route path="tanya-jurusan" element={<TanyaJurusan />} />
+
+          {/* START OF AUTHENTICATOR */}
           <Route path="login" element={<Login />} />
           <Route path="daftar" element={<Daftar />} />
           <Route path="identitas" element={<Identitas />} />
           <Route path="succes" element={<Succes />} />
+          {/* END OF AUTHENTICATOR */}
+
+          {/* START OF PROFILE */}
+          <Route path="profile" element={<ProfileLayout />}>
+            <Route index element={<ProfileIndex />} />
+            <Route path="favorite/jurusan" element={<ProfileFavoritJurusan />} />
+            <Route path="favorite/kampus" element={<ProfileFavoritKampus />} />
+            <Route path="favorite/mentor" element={<ProfileFavoritMentor />} />
+            <Route path="riwayat-tes" element={<ProfileRiwayatTes />} />
+          </Route>
+          {/* END OF PROFILE */}
+
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
