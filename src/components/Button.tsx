@@ -9,7 +9,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "solid-light"
     | "outline-dark"
     | "google"
-    | "neutral";
+    | "neutral"
+    | "error";
   className?: string;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -46,6 +47,8 @@ const Button: React.FC<ButtonProps> = ({
           : "bg-neutral-white text-neutral hover:bg-gray-100";
       case "google":
         return "w-full flex items-center justify-center gap-2 bg-[#BE0B0B] text-white font-medium py-2 rounded-md hover:bg-[#C23321]";
+      case "error":
+        return "w-full flex items-center justify-center gap-2 bg-[#CF1F1F] text-white font-medium py-2 rounded-md hover:bg-[#9c1919]";
       default:
         return "bg-primary-300 text-white hover:bg-primary-400";
     }

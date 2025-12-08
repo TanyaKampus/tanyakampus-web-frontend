@@ -64,7 +64,7 @@ const CekarusMinat = () => {
           <div className="text-center">
             <button
               onClick={handleStartTest}
-              className="w-full md:w-auto bg-[#069494] text-white text-xl font-bold py-3 px-72 rounded-lg 
+              className="w-full md:w-auto cursor-pointer bg-[#069494] text-white text-xl font-bold py-3 px-72 rounded-lg 
                          hover:bg-[#0da3a3] transition duration-300 shadow-md"
             >
               Mulai Test
