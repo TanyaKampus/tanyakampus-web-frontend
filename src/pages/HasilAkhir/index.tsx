@@ -7,6 +7,7 @@ import CampusRecommendationCard from "./components/CampusRecommendationCard";
 import { hasilAkhirData } from "../../data/hasilAkhirData";
 import loading from "../../assets/images/loading.png"
 import download from "../../assets/images/download.png"
+import vector from "../../assets/images/JurusanVector.png"
 import type {
   CampusRecommendation,
   MajorRecommendation,
@@ -24,6 +25,9 @@ const HasilAkhir: React.FC = () => {
   return (
     <div className="container mx-auto p-4 sm:p-8">
       <div className="flex flex-col lg:flex-row gap-8">
+          <div className="absolute top-0 right-0">
+    <img src={vector} alt="Vector" />
+  </div>
         {/* Konten Kiri (besar) */}
         <div className="lg:w-2/3 flex flex-col gap-8">
           {/* HASIL TES */}
