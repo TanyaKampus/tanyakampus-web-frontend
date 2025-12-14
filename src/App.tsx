@@ -22,6 +22,8 @@ const ProfileFavoritJurusan = lazy(() => import("./pages/Profile/ProfileFavoritJ
 const ProfileFavoritKampus = lazy(() => import("./pages/Profile/ProfileFavoritKampus"));
 const ProfileFavoritMentor = lazy(() => import("./pages/Profile/ProfileFavoritMentor"));
 
+const HasilAkhir = lazy(() => import("./pages/HasilAkhir")); // Pastikan nama file adalah index.tsx di folder HasilAkhir
+
 function App() {
   return (
     <BrowserRouter>
@@ -30,6 +32,7 @@ function App() {
 
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="hasil-akhir" element={<HasilAkhir />} />
 
             <Route path="category-test">
               <Route index element={<CategoryTest />} />
