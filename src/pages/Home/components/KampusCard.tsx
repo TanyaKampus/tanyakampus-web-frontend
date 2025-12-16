@@ -1,20 +1,20 @@
-// src/components/KampusCard.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import type { Major } from "@/data/dataKampus";
 
 interface KampusCardProps {
   kampus: Major;
+  className?: string
 }
 
-const KampusCard: React.FC<KampusCardProps> = ({ kampus }) => {
+const KampusCard: React.FC<KampusCardProps> = ({ kampus, className = "" }) => {
   const navigate = useNavigate();
 
   const handleClick = () => navigate(`/tanya-kampus/${kampus.id}`);
 
   return (
     <div
-      className="relative w-[350px] h-[350px] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition cursor-pointer"
+      className={`relative w-[350px] ${className} rounded-xl overflow-hidden shadow-md hover:shadow-lg transition cursor-pointer`}
       onClick={handleClick}
     >
       <img
