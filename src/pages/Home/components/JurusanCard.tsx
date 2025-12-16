@@ -2,10 +2,11 @@ import type { Major } from "@/data/dataJurusan";
 
 interface JurusanCardProps {
   jurusan: Major;
+  className?: string;
 }
 
-const JurusanCard: React.FC<JurusanCardProps> = ({ jurusan }) => (
-  <div className="relative w-[366px] h-[280px] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
+const JurusanCard: React.FC<JurusanCardProps> = ({ jurusan, className = "" }) => (
+  <div className={`relative w-[366px] ${className} rounded-xl overflow-hidden shadow-md hover:shadow-lg transition`}>
     <img
       src={jurusan.image}
       alt={jurusan.name}

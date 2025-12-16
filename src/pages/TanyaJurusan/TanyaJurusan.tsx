@@ -29,7 +29,7 @@ const TanyaJurusan = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
           {allMajors.map((jurusan) => (
-            <JurusanCard key={jurusan.name} jurusan={jurusan} />
+            <JurusanCard key={jurusan.name} jurusan={jurusan} className="h-[280px]"/>
           ))}
         </div>
 
