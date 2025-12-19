@@ -28,4 +28,25 @@ export const mentors: MentorsCardProps[] = [
     originCampuss: "Universitas Padjajaran",
     major: "Ilmu dan Sosial Politik"
   },
+  {
+    imageUrl: Wolverine,
+    logoCampussUrl: UnikomLogo,
+    name: "James Howlett",
+    originCampuss: "Universitas Komputer Indonesia",
+    major: "Teknik dan Ilmu Komputer"
+  },
+  {
+    imageUrl: Deadpool,
+    logoCampussUrl: ITBLogo,
+    name: "Wade Wilson",
+    originCampuss: "Institut Teknologi Bandung",
+    major: "Bisnis dan Ekonomi"
+  },
+  {
+    imageUrl: Thanos,
+    logoCampussUrl: UnpadLogo,
+    name: "Thanos",
+    originCampuss: "Universitas Padjajaran",
+    major: "Ilmu dan Sosial Politik"
+  },
 ];
