@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingScreen from "./components/LoadingScreen";
+import Konsultasi from "./pages/Konsultasi";
 
 const Layout = lazy(() => import("./components/Layout"));
 const HomePage = lazy(() => import("./pages/Home"));
@@ -22,7 +23,7 @@ const ProfileFavoritJurusan = lazy(() => import("./pages/Profile/ProfileFavoritJ
 const ProfileFavoritKampus = lazy(() => import("./pages/Profile/ProfileFavoritKampus"));
 const ProfileFavoritMentor = lazy(() => import("./pages/Profile/ProfileFavoritMentor"));
 
-const HasilAkhir = lazy(() => import("./pages/HasilAkhir")); // Pastikan nama file adalah index.tsx di folder HasilAkhir
+const HasilAkhir = lazy(() => import("./pages/HasilAkhir")); 
 
 function App() {
   return (
@@ -34,17 +35,19 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="hasil-akhir" element={<HasilAkhir />} />
 
-            <Route path="category-test">
-              <Route index element={<CategoryTest />} />
-              <Route path="cek-arus-minat" element={<CekarusMinat />} />
-            </Route>
-
             <Route path="tanya-kampus">
               <Route index element={<TanyaKampus />} />
               <Route path=":id" element={<DetailKampus />} />
             </Route>
 
             <Route path="tanya-jurusan" element={<TanyaJurusan />} />
+
+            <Route path="category-test">
+              <Route index element={<CategoryTest />} />
+              <Route path="cek-arus-minat" element={<CekarusMinat />} />
+            </Route>
+
+            <Route path="konsultasi" element={<Konsultasi />} />
 
             {/* AUTH */}
             <Route path="login" element={<Login />} />
