@@ -7,3 +7,10 @@ export interface TestimonyCardProps {
   avatar: IconType;
   position: "center" | "top" | "bottom" | "hidden";
 }
+
+export interface RiwayatTes {
+  id: number;
+  date: string;
+  majors: string[];
+  waitingCount: number;
+}

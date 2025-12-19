@@ -73,7 +73,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         </li>
 
         <li>
-          <a href="/minat-bakat" className="flex items-center gap-2">
+          <a href="/category-test" className="flex items-center gap-2">
             <MdOutlineScience /> Tanya Minat Bakat
           </a>
         </li>
