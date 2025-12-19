@@ -63,7 +63,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({
 
       <li>
         <a
-          href="/minat-bakat"
+          href="/category-test"
           className="flex items-center gap-2 hover:text-gray-200 transition"
         >
           <MdOutlineScience size={24} />
