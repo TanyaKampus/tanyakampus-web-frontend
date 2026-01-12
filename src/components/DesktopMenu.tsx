@@ -80,7 +80,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({
         </a>
       </li>
       <li>
-        <a href="/about" className="hover:text-gray-200 transition">
+        <a href="/tentang" className="hover:text-gray-200 transition">
           Tentang
         </a>
       </li>

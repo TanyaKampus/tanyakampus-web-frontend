@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import Konsultasi from "./pages/Konsultasi";
+import Tentang from "./pages/About";
 
 const Layout = lazy(() => import("./components/Layout"));
 const HomePage = lazy(() => import("./pages/Home"));
@@ -48,6 +49,8 @@ function App() {
             </Route>
 
             <Route path="konsultasi" element={<Konsultasi />} />
+
+            <Route path="tentang" element={<Tentang />} />
 
             {/* AUTH */}
             <Route path="login" element={<Login />} />
