@@ -4,11 +4,17 @@ import Button from "@/components/Button";
 import LogoItem from "@/components/LogoItem";
 import ButtonRg from "@/assets/images/Button.png";
 import BubbleKiri from "@/assets/images/Bubble.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
 
+  const handleNext = () => {
+    sessionStorage.setItem("register_email", email);
+    navigate("/identitas");
+  };
   const handleBackButton = () => {
     navigate(-1)
   }
@@ -56,11 +62,14 @@ const Register = () => {
           <form className="space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-1">Email</label>
-              <input
-                type="email"
-                placeholder="Masukan Email kamu"
-                className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
+        <input
+          type="email"
+          name="email"
+          placeholder="Masukan Email kamu"
+          className="w-full border border-neutral rounded-xl px-3 py-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
             </div>
             <div className="flex items-center gap-2 mt-2 text-sm text-neutral">
               <div className="w-4 h-4 flex items-center justify-center rounded-full bg-neutral text-white text-xs font-bold">
@@ -69,9 +78,7 @@ const Register = () => {
               <span>Pastikan email kamu sudah benar</span>
             </div>
 
-            <Link to="/identitas" className="w-full">
-              <Button label="Lanjut" variant="solid-dark" className="w-full" />
-            </Link>
+              <Button label="Lanjut" variant="solid-dark" className="w-full" onClick={handleNext}/>
 
             <div className="flex items-center my-4">
               <div className="flex-1 h-px bg-neutral" />

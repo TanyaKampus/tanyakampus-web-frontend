@@ -5,9 +5,38 @@ import Button from "@/components/Button";
 import ButtonRg from "@/assets/images/Button.png";
 import BubbleKanan from "@/assets/images/Bubblekn.png";
 import BubbleKiri from "@/assets/images/Bubblekr.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { registerService } from "@/services/auth.service";
 
 const Identitas = () => {
+  const navigate = useNavigate();
+
+  const email = sessionStorage.getItem("register_email");
+
+  const [form, setForm] = useState({
+    nama: "",
+    asal_sekolah: "",
+    no_telepon: "",
+    password: "",
+    jenis_kelamin: "",
+  });
+
+  const handleSubmit = async () => {
+    if (!email) return alert("Email tidak ditemukan");
+    
+    try {
+      await registerService({
+        email,
+        ...form,
+      });
+      
+      sessionStorage.removeItem("register_email");
+      navigate('/succes')
+    } catch (err) {
+      console.error("Register gagal", err);
+    }
+  };
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="flex-1 flex flex-col justify-center items-center pt-26">
@@ -38,13 +67,10 @@ const Identitas = () => {
                 Nama
               </label>
               <input
-                id="fullName"
-                name="fullName"
-                type="text"
                 placeholder="Masukan Nama Kamu"
-                autoComplete="name"
-                required
+                name="nama"
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                onChange={(e) => setForm({ ...form, nama: e.target.value })}
               />
             </div>
 
@@ -56,12 +82,11 @@ const Identitas = () => {
                 Asal Sekolah
               </label>
               <input
-                id="school"
-                name="school"
-                type="text"
                 placeholder="Dari Mana Asalah Sekolah Kamu"
-                autoComplete="organization"
-                required
+                name="asal_sekolah"
+                onChange={(e) =>
+                  setForm({ ...form, asal_sekolah: e.target.value })
+                }
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
@@ -78,8 +103,8 @@ const Identitas = () => {
                   +62
                 </span>
                 <input
-                  id="phone"
-                  name="phone"
+                  id="no_telepon"
+                  name="no_telepon"
                   type="tel"
                   placeholder="82xxxxxxxxx"
                   inputMode="tel"
@@ -88,6 +113,9 @@ const Identitas = () => {
                   autoComplete="tel"
                   required
                   className="flex-1 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  onChange={(e) =>
+                    setForm({ ...form, no_telepon: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -108,6 +136,7 @@ const Identitas = () => {
                 autoComplete="new-password"
                 required
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
               />
             </div>
             <div>
@@ -119,9 +148,12 @@ const Identitas = () => {
                   <input
                     type="radio"
                     name="gender"
-                    value="laki-laki"
+                    value="Laki-laki"
                     className="accent-teal-600 w-4 h-4"
                     required
+                    onChange={(e) =>
+                      setForm({ ...form, jenis_kelamin: e.target.value })
+                    }
                   />
                   <span className="text-sm text-neutral">Laki-Laki</span>
                 </label>
@@ -132,15 +164,16 @@ const Identitas = () => {
                     value="perempuan"
                     className="accent-teal-600 w-4 h-4"
                     required
+                    onChange={(e) =>
+                      setForm({ ...form, jenis_kelamin: e.target.value })
+                    }
                   />
                   <span className="text-sm text-neutral">Perempuan</span>
                 </label>
               </div>
             </div>
 
-            <Link to="/succes" className="w-full">
-              <Button label="Daftar" variant="solid-dark" className="w-full" />
-            </Link>
+              <Button type="button" label="Daftar" variant="solid-dark" className="w-full" onClick={handleSubmit}/>
           </form>
 
           <img

@@ -1,12 +1,43 @@
+import { useState } from "react";
 import Lulu from "@/assets/images/LuluBodas.png";
 import Vector from "@/assets/images/VectorLogin.png";
 import Button from "@/components/Button";
 import LogoItem from "@/components/LogoItem";
 import BubbleKiri from "@/assets/images/Bubble.png";
+import { loginService } from "@/services/auth.service";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await loginService({ email, password });
+
+      if (res.success) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        navigate("/");
+      }
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Login gagal, silakan coba lagi"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* LEFT */}
       <div className="relative flex-1 bg-gradient-to-b from-primary-200 to-primary-100 flex flex-col justify-center items-center overflow-hidden">
         <div className="absolute top-6 left-8 z-10">
           <LogoItem />
@@ -25,6 +56,7 @@ const Login = () => {
         />
       </div>
 
+      {/* RIGHT */}
       <div className="flex-1 flex flex-col justify-center items-center pt-2">
         <div className="max-w-md w-full">
           <h1 className="text-2xl font-bold text-neutral text-center mb-2">
@@ -34,13 +66,18 @@ const Login = () => {
             Temukan jurusan dan kampus terbaik sesuai kepribadianmu.
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-semibold mb-1">Email</label>
+              <label className="block text-sm font-semibold mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 placeholder="Masukan Email kamu"
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -52,7 +89,11 @@ const Login = () => {
                 type="password"
                 placeholder="Masukan Password kamu"
                 className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
+
               <div className="flex justify-between items-center text-sm mt-1">
                 <label className="flex items-center gap-1">
                   <input type="checkbox" className="accent-teal-600" />
@@ -64,7 +105,19 @@ const Login = () => {
               </div>
             </div>
 
-            <Button label="Masuk" variant="solid-dark" className="w-full" />
+            {/* ERROR MESSAGE (tanpa ganggu design) */}
+            {error && (
+              <p className="text-sm text-red-500 text-center">
+                {error}
+              </p>
+            )}
+
+            <Button
+              label={loading ? "Loading..." : "Masuk"}
+              variant="solid-dark"
+              className="w-full"
+              disabled={loading}
+            />
 
             <p className="text-center text-sm mt-4">
               Belum punya akun?{" "}
@@ -78,7 +131,9 @@ const Login = () => {
 
             <div className="flex items-center my-4">
               <div className="flex-1 h-px bg-neutral" />
-              <span className="px-3 text-sm text-neutral">atau dengan</span>
+              <span className="px-3 text-sm text-neutral">
+                atau dengan
+              </span>
               <div className="flex-1 h-px bg-neutral" />
             </div>
 
@@ -94,7 +149,8 @@ const Login = () => {
               Login dengan Google
             </button>
           </form>
-                    <img
+
+          <img
             src={BubbleKiri}
             alt="Bubble kanan bawah"
             className="fixed right-0 bottom-0 w-[200px] object-contain z-10"
