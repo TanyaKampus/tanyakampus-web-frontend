@@ -14,15 +14,22 @@ const Test = () => {
   const question = minatQuestions[index].question;
 
   const handleAnswer = () => {
-    if (trigger < total) {
-      setTrigger((prev) => prev + 1);
+    const isLastQuestion = index === total - 1;
+
+    // update progress
+    setTrigger((prev) => Math.min(prev + 1, total));
+
+    if (isLastQuestion) {
+      console.log("Test selesai!");
+
+      // 👉 contoh: langsung pindah halaman hasil
+      // navigate("/hasil-test");
+
+      return; // ⛔ STOP, tidak lanjut render soal lagi
     }
 
-    if (index + 1 < total) {
-      setIndex((prev) => prev + 1);
-    } else {
-      console.log("Test selesai!");
-    }
+    // lanjut ke soal berikutnya
+    setIndex((prev) => prev + 1);
   };
 
   const handleExit = () => {
@@ -31,7 +38,6 @@ const Test = () => {
 
   return (
     <section className="bg-white min-h-screen pt-24 px-4 md:px-8 relative">
-
       {/* Tombol Keluar */}
       <div className="absolute top-20 left-[71rem] right-6 md:right-16 z-20">
         <button
