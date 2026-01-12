@@ -83,7 +83,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           </a>
         </li>
         <li>
-          <a href="/about">Tentang</a>
+          <a href="/tentang">Tentang</a>
         </li>
       </ul>
 

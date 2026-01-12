@@ -4,7 +4,7 @@ const LoadingScreen = () => {
       <div className="w-12 h-12 border-4 border-primary-300 border-t-transparent rounded-full animate-spin"></div>
 
       <p className="mt-4 text-primary-300 text-lg font-semibold tracking-wide">
-        SABAR YA ANJ, LAGI LOADING
+        Loading, Mohon Ditunggu
       </p>
     </div>
   );

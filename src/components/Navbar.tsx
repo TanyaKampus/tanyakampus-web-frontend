@@ -25,7 +25,6 @@ const Navbar = () => {
     navigate("/daftar");
   };
 
-  // ✅ Deteksi scroll
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 80) {
@@ -56,7 +55,6 @@ const Navbar = () => {
         <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
           <LogoItem />
 
-          {/* tombol menu untuk mobile */}
           <button
             className="md:hidden text-2xl focus:outline-none"
             onClick={toggleMenu}
