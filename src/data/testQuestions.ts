@@ -1,104 +1,79 @@
 export interface TestQuestion {
   id: number;
   question: string;
-  category: "Teknologi" | "Bisnis" | "Politik" | "Seni" | "General";
+  category: "Teknik" | "Ilmu Komputer" | "Bisnis" | "Ekonomi" | "Ilmu Sosial" | "Politik" | "Desain" | "Seni" | "General";
 }
 
 export const minatQuestions: TestQuestion[] = [
-  // Soal Teknologi
+
   {
     id: 1,
     question:
-      "Kamu lebih tertarik untuk benar-benar mengutak-atik hardware atau coding untuk menciptakan solusi teknologi, daripada hanya membaca teorinya?",
-    category: "Teknologi",
+      "Kamu cukup menikmati kegiatan yang berhubungan sama merakit, atau memperbaiki alat/mesin (misalnya elektronik, motor, komputer)?",
+    category: "Teknik",
   },
   {
     id: 2,
     question:
-      "Kalau ada masalah error di sistem, kamu ingin langsung jadi orang yang turun tangan membetulkan kode atau arsitektur jaringan secara teknis?",
-    category: "Teknologi",
+      "Kamu ingin langsung jadi orang yang turun tangan membetulkan kode atau arsitektur jaringan secara teknis kalau ada masalah error di sistem?",
+    category: "Ilmu Komputer",
   },
   {
     id: 3,
     question:
-      "Kamu selalu merasa senang jika bekerja untuk menyelesaikan proyek proyek teknikal?",
-    category: "Teknologi",
+      "Kamu tertarik buat punya usaha sendiri suatu hari nanti, kayak buka toko, jualan online, atau bangun brand kamu sendiri?",
+    category: "Bisnis",
   },
 
   // Soal Bisnis dan Ekonomi
   {
     id: 4,
     question:
-      "Kamu lebih suka jadi orang yang langsung mengambil keputusan berisiko tinggi daripada hanya membuat laporan analisisnya saja?",
-    category: "Bisnis",
+      "Kamu mau kalau mikir soal uang, harga barang, untung-rugi, atau cari faktor kenapa harga sesuatu bisa naik dan turun?",
+    category: "Ekonomi",
   },
   {
     id: 5,
     question:
-      "Kamu tertarik untuk secara langsung memimpin tim penjualan atau negosiasi di lapangan untuk mencapai target bisnis?",
-    category: "Bisnis",
+      "Kamu merasa semangat kalau harus sering berinteraksi sama orang, dengerin cerita mereka, dan bantu nyelesaiin masalah mereka?",
+    category: "Ilmu Sosial",
   },
   {
     id: 6,
     question:
-      "Kamu merasa tertantang untuk terjun langsung membuat dan menjual produk/jasa yang nyata di pasar, dan langsung melihat hasilnya?",
-    category: "Bisnis",
+      "Kamu sering penasaran sama berita pemerintahan, pemilu, kebijakan negara, atau hal-hal yang ngatur kehidupan masyarakat luas?",
+    category: "Politik",
   },
-  // Ilmu Sosial dan Politik
+
   {
     id: 7,
     question:
-      "Kamu lebih tertarik untuk terjun langsung ke lapangan, bertemu warga, dan mengorganisir aksi sosial?",
-    category: "Politik",
+      "Kamu memiliki ketertarikan pada elemen warna, bentuk, dan estetika dalam mendesain suatu karya?",
+    category: "Desain",
   },
   {
     id: 8,
     question:
-      "Kamu bersedia menjadi penengah atau mediator langsung dalam konflik antar individu atau kelompok?",
-    category: "Politik",
+      "Kamu merasa selalu terinspirasi oleh seni, musik, atau ekspresi kreatif lainnya?",
+    category: "Seni",
   },
   {
     id: 9,
     question:
-      "Kamu punya minat yang kuat untuk secara langsung mengajar, atau melatih?",
-    category: "Politik",
+      "Kamu merasa lebih berenergi ketika banyak berinteraksi dan ngobrol langsung dengan orang lain dibanding ketika sendirian?",
+    category: "General",
   },
   //Desain dan Seni
   {
     id: 10,
     question:
-      "Kamu merasa tertarik untuk mengekspresikan ide kreatif melalui gambar atau seni visual?",
-    category: "Seni",
-  },
-  {
-    id: 11,
-    question:
-      "Kamu memiliki ketertarikan pada elemen warna, bentuk, dan estetika dalam desain?",
-    category: "Seni",
-  },
-  {
-    id: 12,
-    question:
-      "Kamu merasa terinspirasi oleh seni, musik, atau ekspresi kreatif lainnya?",
-    category: "Seni",
-  },
-  //GENERAL
-  {
-    id: 13,
-    question:
-      "Kamu merasa lebih berenergi ketika banyak berinteraksi dan ngobrol langsung dengan orang lain dibanding ketika sendirian?",
-    category: "General",
-  },
-  {
-    id: 14,
-    question:
       "Saat mengambil keputusan penting, kamu lebih mengandalkan data, fakta, dan analisis daripada firasat atau perasaan?",
     category: "General",
   },
   {
-    id: 15,
+    id: 11,
     question:
       "Kamu lebih nyaman jika punya rencana kerja yang jelas dan langkah-langkah tertulis, daripada bekerja mengalir dan improvisasi di tempat?",
     category: "General",
-  },
+  }
 ];
