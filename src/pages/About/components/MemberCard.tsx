@@ -1,45 +1,55 @@
+// src/pages/Tentang/components/MemberCard.tsx
 import React from "react";
-import { AiFillInstagram, AiFillLinkedin  } from "react-icons/ai";
+import { AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
+import type { MentorCard } from "@/services/mentor.service";
 
 interface MemberCardProps {
-  image: string;
-  name: string;
-  role: string;
-  quote?: string;
+  member: MentorCard;
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({
-  image,
-  name,
-  role,
-  quote,
-}) => {
+const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
   return (
     <div className="rounded-2xl p-4 transition">
       <img
-        src={image}
-        alt={name}
+        src={member.image}
+        alt={member.name}
         className="w-full h-[300px] object-cover rounded-tr-4xl rounded-br-4xl rounded-bl-4xl"
       />
 
       <div className="mt-4 space-y-2">
         <span className="inline-block px-3 py-1 font-medium text-primary-300 border border-primary-300 rounded-full">
-          {name}
+          {member.name}
         </span>
 
         <p className="text-sm font-semibold text-tertiary-500">
-          {role}
+          {member.role}
         </p>
 
-        {quote && (
-          <p className="text-sm text-neutral">
-            “{quote}”
+        {member.quote && (
+          <p className="text-sm text-neutral leading-relaxed">
+            “{member.quote}”
           </p>
         )}
 
         <div className="flex gap-2 pt-2 text-teal-600 text-2xl">
-          <span className="cursor-pointer"><AiFillInstagram /></span>
-          <span className="cursor-pointer"><AiFillLinkedin /></span>
+          <a
+            className="cursor-pointer"
+            href={member.instagram || "#"}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Instagram"
+          >
+            <AiFillInstagram />
+          </a>
+          <a
+            className="cursor-pointer"
+            href={member.linkedin || "#"}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+          >
+            <AiFillLinkedin />
+          </a>
         </div>
       </div>
     </div>

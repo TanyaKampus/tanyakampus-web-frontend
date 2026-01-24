@@ -1,23 +1,25 @@
-import { useParams } from "react-router-dom";
+// src/pages/TanyaKampus/DetailKampus/ProgramStudiKampus.tsx
 import { useState } from "react";
-import { dataDetailKampus } from "@/data/dataDetailKampus";
-import { programStudi } from "@/data/dataProgramStudi";
 
-const ProgramStudiKampus = () => {
-  const { id } = useParams();
-  const kampus = dataDetailKampus.find((item) => item.id === id);
-  if (!kampus) return null;
+type Props = {
+  kampusNama: string;
+  jurusan: Array<{
+    jurusan_id: string;
+    nama_jurusan: string;
+    deskripsi?: string | null;
+  }>;
+};
 
-  const getSingkatan = (nama?: string) => {
-    const match = nama?.match(/\(([^)]+)\)/);
-    return match ? match[1] : nama;
-  };
-
-  const singkatan = getSingkatan(kampus.nama);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const ProgramStudiKampus: React.FC<Props> = ({ kampusNama, jurusan }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const dataS1 = programStudi[id as keyof typeof programStudi]?.S1 || [];
+  // Biar desain kamu tetap sama: kita bikin 1 kategori "Program Studi"
+  const dataS1 = [
+    {
+      kategori: "Program Studi",
+      list: jurusan.map((j) => j.nama_jurusan),
+    },
+  ];
 
   return (
     <div className="min-h-[480px] bg-[#E2F2F2] px-6 md:px-16 py-12 overflow-hidden">
@@ -25,12 +27,11 @@ const ProgramStudiKampus = () => {
       <div className="mb-10">
         <h1 className="text-3xl font-semibold mb-3">Program Studi</h1>
         <p className="text-[#6f6f6f] leading-relaxed ">
-          Yuk, jelajahi beragam jurusan seru di {singkatan} dan temukan bidang
+          Yuk, jelajahi beragam jurusan seru di {kampusNama} dan temukan bidang
           yang paling cocok <br />buat pengembangan kariermu!
         </p>
       </div>
 
-      {/* Layout 2 kolom */}
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-[180px_1fr] gap-20">
         {/* Label S1 / Sarjana */}
         <div className="md:block">
@@ -42,11 +43,10 @@ const ProgramStudiKampus = () => {
           </div>
         </div>
 
-        {/* Dropdown Fakultas */}
+        {/* Dropdown */}
         <div className="flex flex-col gap-2">
           {dataS1.map((item, index) => (
             <div key={index} className="w-full">
-              {/* Kategori */}
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-[430px] bg-white rounded-full px-4 py-1 flex items-center justify-between shadow-sm hover:shadow-md transition-all"
@@ -58,7 +58,6 @@ const ProgramStudiKampus = () => {
                 </p>
               </button>
 
-              {/* Dropdown isi prodi */}
               <div
                 className={`bg-white w-[430px] rounded-xl shadow-md p-4 px-6 flex flex-col gap-3 transition-all duration-300 overflow-hidden ${
                   openIndex === index
@@ -66,6 +65,12 @@ const ProgramStudiKampus = () => {
                     : "max-h-0 opacity-0"
                 }`}
               >
+                {item.list.length === 0 && (
+                  <div className="text-gray-700 py-2">
+                    Belum ada jurusan untuk kampus ini.
+                  </div>
+                )}
+
                 {item.list.map((prodi, i) => (
                   <div key={i} className="text-gray-700 last:border-none py-2">
                     {prodi}
