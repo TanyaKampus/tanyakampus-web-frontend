@@ -1,26 +1,25 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+// src/pages/TanyaKampus/DetailKampus/HeroDetail.tsx
+import { useEffect, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import { dataDetailKampus } from "@/data/dataDetailKampus";
 import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
 
-const HeroDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const kampus = dataDetailKampus.find((k) => k.id === id);
+type Props = {
+  kampus: {
+    kampus_id: string;
+    nama_kampus: string;
+    jenis_kampus: string;
+    foto_kampus?: string | null;
+  };
+};
 
-  if (!kampus) return null;
-
-  const images: string[] = kampus.carouselImages ?? [];
+const HeroDetail: React.FC<Props> = ({ kampus }) => {
+  const images: string[] = kampus.foto_kampus ? [kampus.foto_kampus] : [];
   const autoplayDelay = 5000;
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [liked, setLiked] = useState(false);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (images.length <= 1) return;
 
@@ -29,7 +28,7 @@ const HeroDetail: React.FC = () => {
     }, autoplayDelay);
 
     return () => clearInterval(interval);
-  }, [images.length, autoplayDelay]);
+  }, [images.length]);
 
   const handleDotClick = (index: number) => {
     setActiveIndex(index);
@@ -50,17 +49,19 @@ const HeroDetail: React.FC = () => {
 
       <div className="flex w-full h-full justify-between items-start pt-10 relative">
         <div className="flex flex-row items-center gap-6 mt-10 z-10 relative">
-          <img src={kampus.logo} className="w-40 h-40 object-contain mt-25" />
+          {/* Logo dummy tetap (biar desain sama), nanti kalau backend ada logo tinggal ganti */}
+          <div className="w-40 h-40 bg-white rounded-xl shadow-sm mt-25 flex items-center justify-center text-gray-500">
+            LOGO
+          </div>
 
           <button
             onClick={() => setLiked(!liked)}
             className="absolute top-0 right-0 transition duration-200 translate-y-10"
           >
             <div
-              className={`
-      w-9 h-9 transition-all duration-200
-      ${liked ? "opacity-100 scale-110" : "opacity-60 scale-100"}
-    `}
+              className={`w-9 h-9 transition-all duration-200 ${
+                liked ? "opacity-100 scale-110" : "opacity-60 scale-100"
+              }`}
             >
               <img
                 src={liked ? Likeactive : Like}
@@ -72,19 +73,15 @@ const HeroDetail: React.FC = () => {
 
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold text-[#5C5C5C] leading-tight mt-25">
-              {kampus.nama.split(" (")[0]}
-              <br />({kampus.nama.split(" (")[1]?.replace(")", "")})
+              {kampus.nama_kampus}
             </h1>
 
             <div className="text-xl font-medium mt-2 text-gray-800 flex flex-wrap items-center">
-              {Array.isArray(kampus.kategori)
-                ? kampus.kategori.map((item, index) => (
-                    <span key={index} className="flex items-center">
-                      <span>{item}</span>
-                      {index < kampus.kategori.length - 1 && <DotSeparator />}
-                    </span>
-                  ))
-                : kampus.kategori}
+              <span className="flex items-center">
+                <span>{kampus.jenis_kampus}</span>
+                <DotSeparator />
+                <span>Indonesia</span>
+              </span>
             </div>
           </div>
         </div>
@@ -104,7 +101,7 @@ const HeroDetail: React.FC = () => {
               ))}
 
               {images.length > 1 && (
-                <div className="absolute bottom-0  left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2">
                   {images.map((_, index) => (
                     <button
                       key={index}
