@@ -1,23 +1,42 @@
 import { useEffect, useState } from "react";
 import Button from "@/components/Button";
-import CampusCard, { type CampusCardProps } from "@/components/CampusCard";
-import { campuses } from "@/data/campuses";
+import CampusCard from "@/components/CampusCard";
 import Vector from "@/assets/images/RecomVector.png";
 import KuraKura from "@/assets/images/KuraKura.png";
 import { useNavigate } from "react-router-dom";
+import { getAllCampus } from "@/services/campus.service";
+import type { CampusCardProps } from "@/services/campus.service";
 
 const SLIDE_INTERVAL = 4000;
 const FADE_DURATION = 500;
 
 const RecommendationSection = () => {
   const navigate = useNavigate();
+  const [campuses, setCampuses] = useState<CampusCardProps[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleButtonClick = () => {
     navigate("/tanya-kampus");
   };
 
+  useEffect(() => {
+    const fetchCampuses = async () => {
+      try {
+        const data = await getAllCampus();
+        setCampuses(data);
+      } catch (error) {
+        console.error("Gagal mengambil data kampus:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampuses();
+  }, []);
+
+  // 🔁 Slider logic (tetap sama)
   useEffect(() => {
     if (campuses.length <= 3) return;
 
@@ -31,9 +50,13 @@ const RecommendationSection = () => {
     }, SLIDE_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [campuses]);
 
-  const displayCampuses: CampusCardProps[] = Array.from(
+  if (loading) {
+    return <p className="text-center mt-32">Loading rekomendasi kampus...</p>;
+  }
+
+  const displayCampuses = Array.from(
     { length: 3 },
     (_, i) => campuses[(currentIndex + i) % campuses.length]
   );
@@ -49,7 +72,7 @@ const RecommendationSection = () => {
       <img
         src={KuraKura}
         alt="Kura Kura"
-        className="hidden md:block absolute left-0 -bottom-1 object-contain z-0 w-[150px]"
+        className="hidden md:block absolute left-0 -bottom-1 z-0 w-[150px]"
       />
 
       <div className="container mx-auto relative z-10">
@@ -80,14 +103,14 @@ const RecommendationSection = () => {
             const isCenter = i === 1;
             return (
               <div
-                key={`${campus.name}-${i}`}
+                key={campus.kampus_id}
                 className={`transition-all duration-500 ease-in-out ${
                   isCenter
                     ? "scale-110 -translate-y-4 z-10"
                     : "scale-90 blur-xs opacity-70"
                 }`}
               >
-                <CampusCard {...campus} />
+                <CampusCard kampus={campus} />
               </div>
             );
           })}
