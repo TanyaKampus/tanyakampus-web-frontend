@@ -30,7 +30,7 @@ const KampusDetail = () => {
         setError("");
 
         const res = await getCampusByIdService(id);
-        console.log("DETAIL CAMPUS:", res.data); // cek maps_url & logo_kampus
+        console.log("DETAIL CAMPUS:", res.data); 
 
         setKampus(res.data);
       } catch (e: unknown) {

@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import Konsultasi from "./pages/Konsultasi";
 import Tentang from "./pages/About";
+import DetailJurusan from "./pages/TanyaJurusan/DetailJurusan";
 
 const Layout = lazy(() => import("./components/Layout"));
 const HomePage = lazy(() => import("./pages/Home"));
@@ -24,7 +25,7 @@ const ProfileFavoritJurusan = lazy(() => import("./pages/Profile/ProfileFavoritJ
 const ProfileFavoritKampus = lazy(() => import("./pages/Profile/ProfileFavoritKampus"));
 const ProfileFavoritMentor = lazy(() => import("./pages/Profile/ProfileFavoritMentor"));
 
-const HasilAkhir = lazy(() => import("./pages/HasilAkhir")); 
+// const HasilAkhir = lazy(() => import("./pages/HasilAkhir")); 
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
 
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path="hasil-akhir" element={<HasilAkhir />} />
+            {/* <Route path="hasil-akhir" element={<HasilAkhir />} /> */}
 
             <Route path="tanya-kampus">
               <Route index element={<TanyaKampus />} />
@@ -42,6 +43,7 @@ function App() {
             </Route>
 
             <Route path="tanya-jurusan" element={<TanyaJurusan />} />
+            <Route path="tanya-jurusan/:id" element={<DetailJurusan />} />
 
             <Route path="category-test">
               <Route index element={<CategoryTest />} />
