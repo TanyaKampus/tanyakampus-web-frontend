@@ -6,12 +6,7 @@ import LogoItem from "@/components/LogoItem";
 import BubbleKiri from "@/assets/images/Bubble.png";
 import { loginService } from "@/services/auth.service";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-type ApiErrorResponse = {
-  message?: string;
-  error?: string;
-};
+import { toastError, toastSuccess } from "@/components/Toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,22 +25,15 @@ const Login = () => {
 
       if (res?.success) {
         localStorage.setItem("user", JSON.stringify(res.data));
+        toastSuccess("Login Berhasil!")
+        setTimeout(() => {
+          navigate("/");
+        }, 1500)
 
-        navigate("/");
         return;
       }
-      setError(res?.message || "Login gagal, silakan coba lagi");
-    } catch (err: unknown) {
-      if (axios.isAxiosError<ApiErrorResponse>(err)) {
-        setError(
-          err.response?.data?.message ||
-            err.response?.data?.error ||
-            err.message ||
-            "Login gagal, silakan coba lagi",
-        );
-      } else {
-        setError("Login gagal, silakan coba lagi");
-      }
+    } catch (err: any) {
+      toastError("Email atau Password Salah.")
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
 import { addFavoriteMajorService } from "@/services/favorite.service";
+import { toastError, toastSuccess } from "@/components/Toast";
 
 type Props = {
   jurusan: {
@@ -30,11 +31,9 @@ const HeroDetailJurusan: React.FC<Props> = ({ jurusan }) => {
       setLoadingLike(true);
       await addFavoriteMajorService(jurusan.jurusan_id);
       setLiked(true);
+      toastSuccess("Berhasil Menambahkan Jurusan ke Favorit!")
     } catch (err: any) {
-      alert(
-        err.response?.data?.message ||
-          "Gagal menambahkan jurusan ke favorit"
-      );
+      toastError("Gagal menambahkan jurusan ke favorit");
     } finally {
       setLoadingLike(false);
     }

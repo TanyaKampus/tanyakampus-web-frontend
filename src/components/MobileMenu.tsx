@@ -10,6 +10,11 @@ import { useNavigate } from "react-router-dom";
 interface User {
   id: string;
   email: string;
+  role: string;
+  profile?: {
+    nama: string;
+    foto_profil: string;
+  };
 }
 
 interface MobileMenuProps {
@@ -110,11 +115,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         {user ? (
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white text-primary-200 flex items-center justify-center font-bold">
-                {user.email.charAt(0).toUpperCase()}
-              </div>
+              <img src={user.profile?.foto_profil} className="w-10 h-10 rounded-full bg-white text-primary-200 flex items-center justify-center font-bold"/>
               <span className="font-medium">
-                {user.email.split("@")[0]}
+                {user.profile?.nama}
               </span>
             </div>
 

@@ -6,6 +6,8 @@ import LogoItem from "./LogoItem";
 import DesktopMenu from "./DesktopMenu";
 import MobileMenu from "./MobileMenu";
 import { getMeService } from "@/services/user.service";
+import { logoutService } from "@/services/auth.service";
+import { toast } from "react-toastify";
 
 interface User {
   id: string;
@@ -28,6 +30,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const toggleProfileDropdown = () =>
@@ -52,9 +55,20 @@ const Navbar = () => {
     fetchMe();
   }, []);
 
-  const handleLogout = () => {
-    setUser(null);
-    navigate("/");
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    try {
+      setLoggingOut(true);
+      await logoutService();
+      setUser(null);
+      localStorage.removeItem('user')
+      toast.success("Berhasil logout");
+      navigate("/");
+    } catch (err: any) {
+      toast.error("Gagal logout. Silakan coba lagi.");
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
   useEffect(() => {
@@ -79,11 +93,7 @@ const Navbar = () => {
       <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
         <LogoItem />
 
-        {/* MOBILE BUTTON */}
-        <button
-          className="md:hidden text-2xl"
-          onClick={toggleMenu}
-        >
+        <button className="md:hidden text-2xl" onClick={toggleMenu}>
           {isMenuOpen ? <FiX /> : <FiMenu />}
         </button>
 
@@ -92,7 +102,6 @@ const Navbar = () => {
           toggleDropdown={toggleDropdown}
         />
 
-        {/* DESKTOP RIGHT */}
         <div className="hidden md:flex items-center space-x-4">
           {loadingUser ? null : user ? (
             <div className="relative">
@@ -100,18 +109,17 @@ const Navbar = () => {
                 onClick={toggleProfileDropdown}
                 className="flex items-center gap-3 cursor-pointer"
               >
-                {/* AVATAR */}
                 <div>
-                 <img src={user.profile?.foto_profil} className="w-10 h-10 rounded-full bg-white object-cover" />
+                  <img
+                    src={user.profile?.foto_profil}
+                    className="w-10 h-10 rounded-full bg-white object-cover"
+                  />
                 </div>
-
-                {/* DISPLAY NAME */}
                 <span className="font-medium text-white">
                   {user.profile?.nama || user.email.split("@")[0]}
                 </span>
               </div>
 
-              {/* PROFILE DROPDOWN */}
               {isProfileDropdownOpen && (
                 <div className="absolute right-0 mt-3 bg-white w-40 rounded-xl shadow-lg overflow-hidden">
                   <button
@@ -122,7 +130,8 @@ const Navbar = () => {
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                    disabled={loggingOut}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Logout
                   </button>
@@ -146,7 +155,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
       <MobileMenu
         isMenuOpen={isMenuOpen}
         isDropdownOpen={isDropdownOpen}

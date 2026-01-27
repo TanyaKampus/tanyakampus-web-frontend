@@ -4,6 +4,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import Konsultasi from "./pages/Konsultasi";
 import Tentang from "./pages/About";
 import DetailJurusan from "./pages/TanyaJurusan/DetailJurusan";
+import { Toast } from "./components/Toast";
 
 const Layout = lazy(() => import("./components/Layout"));
 const HomePage = lazy(() => import("./pages/Home"));
@@ -31,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<LoadingScreen />}>
+      <Toast />
         <Routes>
 
           <Route path="/" element={<Layout />}>
