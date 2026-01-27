@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMeService, updateMeService } from "@/services/user.service";
+import { toastError, toastSuccess } from "@/components/Toast";
+import Button from "@/components/Button";
 
 const ProfileForm = () => {
   const [form, setForm] = useState({
@@ -45,7 +47,7 @@ const ProfileForm = () => {
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -69,9 +71,12 @@ const ProfileForm = () => {
         foto_profil: form.foto_profil ?? undefined,
       });
 
-      alert("Profil berhasil disimpan");
+      toastSuccess("Profil Berhasil Disimpan!");
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
     } catch (err: any) {
-      alert(err.response?.data?.message || "Gagal update profile");
+      toastError("Gagal Mengubah Profil!");
     } finally {
       setSaving(false);
     }
@@ -161,15 +166,13 @@ const ProfileForm = () => {
             className="w-full mt-1 border-[#D7D7D7] border-2 px-3 py-2 rounded-lg"
           />
         </div>
-
-        <button
+        <Button
           type="submit"
-          onClick={handleSubmit}
           disabled={saving}
-          className="rounded-lg px-4 py-2 border-2 border-[#D7D7D7]"
-        >
-          {saving ? "Menyimpan..." : "Simpan"}
-        </button>
+          label={saving ? "Menyimpan..." : "Ubah Data"}
+          onClick={handleSubmit}
+          className="w-full"
+        />
       </div>
     </form>
   );

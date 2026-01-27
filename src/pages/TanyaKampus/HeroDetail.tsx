@@ -3,6 +3,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
 import { addFavoriteCampusService } from "@/services/favorite.service";
+import { toastError, toastSuccess } from "@/components/Toast";
 
 type Props = {
   kampus: {
@@ -44,13 +45,11 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
       setLoadingLike(true);
 
       await addFavoriteCampusService(kampus.kampus_id);
+      toastSuccess("Berhasil Menambahkan Kampus ke Favorit!")
 
       setLiked(true);
     } catch (err: any) {
-      alert(
-        err.response?.data?.message ||
-          "Gagal menambahkan ke favorit. Silakan login."
-      );
+      toastError("Gagal menambahkan ke favorit. Silakan login.");
     } finally {
       setLoadingLike(false);
     }

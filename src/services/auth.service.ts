@@ -13,9 +13,9 @@ export const loginService = async (
 };
 
 export const logoutService = async () => {
-  const res = await api.post(
+  const res = await api.delete(
     "/api/auth/logout",
-    {}
+    { withCredentials: true }
   );
   return res.data;
 };
