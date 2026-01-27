@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
+import { addFavoriteCampusService } from "@/services/favorite.service";
 
 type Props = {
   kampus: {
@@ -9,8 +10,6 @@ type Props = {
     nama_kampus: string;
     jenis_kampus: string;
     foto_kampus?: string | null;
-
-    // ✅ ambil dari service
     logo_kampus?: string | null;
     akreditasi?: string | null;
   };
@@ -20,8 +19,9 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
   const images: string[] = kampus.foto_kampus ? [kampus.foto_kampus] : [];
   const autoplayDelay = 5000;
 
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(false);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -35,6 +35,25 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
 
   const handleDotClick = (index: number) => {
     setActiveIndex(index);
+  };
+
+  const handleLike = async () => {
+    if (loadingLike) return;
+
+    try {
+      setLoadingLike(true);
+
+      await addFavoriteCampusService(kampus.kampus_id);
+
+      setLiked(true);
+    } catch (err: any) {
+      alert(
+        err.response?.data?.message ||
+          "Gagal menambahkan ke favorit. Silakan login."
+      );
+    } finally {
+      setLoadingLike(false);
+    }
   };
 
   const DotSeparator = () => (
@@ -52,15 +71,14 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
 
       <div className="flex w-full h-full justify-between items-start pt-10 relative">
         <div className="flex flex-row items-center gap-6 mt-10 z-10 relative">
-          {/* ✅ LOGO dari API (UI kotaknya tetap sama) */}
-          <div className="w-40 h-40  mt-25 flex items-center justify-center text-gray-500 overflow-hidden">
+          {/* LOGO */}
+          <div className="w-40 h-40 mt-25 flex items-center justify-center text-gray-500 overflow-hidden">
             {kampus.logo_kampus ? (
               <img
                 src={kampus.logo_kampus}
                 alt={`Logo ${kampus.nama_kampus}`}
                 className="w-full h-full object-contain p-4"
                 onError={(e) => {
-                  // fallback kalau url logo error
                   (e.currentTarget as HTMLImageElement).style.display = "none";
                 }}
               />
@@ -69,8 +87,10 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
             )}
           </div>
 
+          {/* ❤️ LIKE BUTTON */}
           <button
-            onClick={() => setLiked(!liked)}
+            onClick={handleLike}
+            disabled={loadingLike}
             className="absolute top-0 right-0 transition duration-200 translate-y-10"
           >
             <div
@@ -97,18 +117,18 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
                 <DotSeparator />
                 <span>Indonesia</span>
 
-                {/* opsional: tampilkan akreditasi kalau mau (tidak mengubah UI besar) */}
-                {kampus.akreditasi ? (
+                {kampus.akreditasi && (
                   <>
                     <DotSeparator />
                     <span>Akreditasi {kampus.akreditasi}</span>
                   </>
-                ) : null}
+                )}
               </span>
             </div>
           </div>
         </div>
 
+        {/* SLIDER */}
         {images.length > 0 && (
           <div className="absolute right-0 top-0 bottom-0 w-full md:w-2/3 lg:w-1/2 h-full z-0 overflow-hidden">
             <div className="relative w-full h-full flex justify-center items-center">
@@ -134,7 +154,6 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
                           ? "bg-teal-500"
                           : "bg-gray-400 hover:bg-gray-300"
                       }`}
-                      aria-label={`Lihat gambar ${index + 1}`}
                     />
                   ))}
                 </div>

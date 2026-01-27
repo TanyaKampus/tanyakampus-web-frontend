@@ -12,12 +12,20 @@ export const loginService = async (
   return response.data;
 };
 
+export const logoutService = async () => {
+  const res = await api.post(
+    "/api/auth/logout",
+    {}
+  );
+  return res.data;
+};
+
 export const registerService = async (
   payload: RegisterPayload
 ): Promise<RegisterResponse> => {
   const response = await api.post<RegisterResponse>(
     "/api/auth/register",
-    payload
+    payload,
   );
 
   return response.data;

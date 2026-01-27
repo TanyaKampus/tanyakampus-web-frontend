@@ -16,7 +16,6 @@ const ProfileForm = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ TARIK DATA DARI BACKEND
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -65,8 +64,8 @@ const ProfileForm = () => {
         nama: form.nama,
         jenis_kelamin: form.gender,
         tanggal_lahir: form.tanggal_lahir,
-        pendidikan: form.pendidikan,
-        telepon: form.telepon,
+        asal_sekolah: form.pendidikan,
+        no_telepon: form.telepon,
         foto_profil: form.foto_profil ?? undefined,
       });
 
@@ -81,7 +80,7 @@ const ProfileForm = () => {
   if (loading) return <p>Loading profile...</p>;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <h2 className="font-bold text-lg mb-4">Identitas</h2>
 
       {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -165,6 +164,7 @@ const ProfileForm = () => {
 
         <button
           type="submit"
+          onClick={handleSubmit}
           disabled={saving}
           className="rounded-lg px-4 py-2 border-2 border-[#D7D7D7]"
         >

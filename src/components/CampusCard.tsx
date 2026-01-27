@@ -1,9 +1,9 @@
-import type { CampusCardProps } from "@/services/campus.service";
+import type { Campus } from "@/services/campus.service";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface KampusCardProps {
-  kampus: CampusCardProps;
+  kampus: Campus;
   className?: string;
 }
 

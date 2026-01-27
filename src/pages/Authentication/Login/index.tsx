@@ -28,20 +28,12 @@ const Login = () => {
     try {
       const res = await loginService({ email, password });
 
-      // ✅ kalau backend kamu formatnya { success, data, accessToken, refreshToken }
       if (res?.success) {
-        // ✅ SIMPAN TOKEN (PENTING!)
-        if (res.accessToken) localStorage.setItem("accessToken", res.accessToken);
-        if (res.refreshToken) localStorage.setItem("refreshToken", res.refreshToken);
-
-        // ✅ SIMPAN USER
         localStorage.setItem("user", JSON.stringify(res.data));
 
         navigate("/");
         return;
       }
-
-      // kalau success false
       setError(res?.message || "Login gagal, silakan coba lagi");
     } catch (err: unknown) {
       if (axios.isAxiosError<ApiErrorResponse>(err)) {
@@ -61,7 +53,6 @@ const Login = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* LEFT */}
       <div className="relative flex-1 bg-gradient-to-b from-primary-200 to-primary-100 flex flex-col justify-center items-center overflow-hidden">
         <div className="absolute top-6 left-8 z-10">
           <LogoItem />

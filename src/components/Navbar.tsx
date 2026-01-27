@@ -5,10 +5,16 @@ import Button from "./Button";
 import LogoItem from "./LogoItem";
 import DesktopMenu from "./DesktopMenu";
 import MobileMenu from "./MobileMenu";
+import { getMeService } from "@/services/user.service";
 
 interface User {
   id: string;
   email: string;
+  role: string;
+  profile?: {
+    nama: string;
+    foto_profil: string;
+  };
 }
 
 const Navbar = () => {
@@ -21,32 +27,38 @@ const Navbar = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+  const toggleProfileDropdown = () =>
+    setIsProfileDropdownOpen((prev) => !prev);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleLoginButton = () => navigate("/login");
   const handleDaftarButton = () => navigate("/daftar");
 
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        const res = await getMeService();
+        setUser(res.data);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    fetchMe();
+  }, []);
+
   const handleLogout = () => {
-    localStorage.removeItem("user");
     setUser(null);
     navigate("/");
   };
 
-  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-  const toggleProfileDropdown = () => setIsProfileDropdownOpen((prev) => !prev);
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 80);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -63,86 +75,90 @@ const Navbar = () => {
   `;
 
   return (
-    <>
-      <nav className={navClass}>
-        <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
-          <LogoItem />
+    <nav className={navClass}>
+      <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
+        <LogoItem />
 
-          <button
-            className="md:hidden text-2xl focus:outline-none"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? <FiX /> : <FiMenu />}
-          </button>
+        {/* MOBILE BUTTON */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={toggleMenu}
+        >
+          {isMenuOpen ? <FiX /> : <FiMenu />}
+        </button>
 
-          <DesktopMenu
-            isDropdownOpen={isDropdownOpen}
-            toggleDropdown={toggleDropdown}
-          />
-
-          <div className="hidden md:flex items-center space-x-4">
-            {user ? (
-              <div className="relative">
-                <div
-                  onClick={toggleProfileDropdown}
-                  className="flex items-center gap-3 cursor-pointer select-none"
-                >
-                  <div className="w-9 h-9 rounded-full bg-white text-primary-200 flex items-center justify-center font-bold">
-                    {user.email.charAt(0).toUpperCase()}
-                  </div>
-
-                  <span className="font-medium text-white">
-                    {user.email.split("@")[0]}
-                  </span>
-                </div>
-
-                {isProfileDropdownOpen && (
-                  <div className="absolute right-0 mt-3 bg-white w-40 rounded-xl shadow-lg overflow-hidden">
-                    <button
-                      onClick={() => navigate("/profile")}
-                      className="w-full text-left text-black px-4 py-2 text-sm hover:bg-gray-100"
-                    >
-                      Profile
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <>
-                <Button
-                  label="Daftar"
-                  variant="solid-light"
-                  onClick={handleDaftarButton}
-                />
-                <Button
-                  label="Masuk"
-                  variant="outline"
-                  onClick={handleLoginButton}
-                />
-              </>
-            )}
-          </div>
-        </div>
-
-        <MobileMenu
-          isMenuOpen={isMenuOpen}
+        <DesktopMenu
           isDropdownOpen={isDropdownOpen}
           toggleDropdown={toggleDropdown}
-          onLoginClick={() => {
-            setIsMenuOpen(false);
-            navigate("/login");
-          }}
-          user={user}
-          onLogout={handleLogout}
         />
-      </nav>
-    </>
+
+        {/* DESKTOP RIGHT */}
+        <div className="hidden md:flex items-center space-x-4">
+          {loadingUser ? null : user ? (
+            <div className="relative">
+              <div
+                onClick={toggleProfileDropdown}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                {/* AVATAR */}
+                <div>
+                 <img src={user.profile?.foto_profil} className="w-10 h-10 rounded-full bg-white object-cover" />
+                </div>
+
+                {/* DISPLAY NAME */}
+                <span className="font-medium text-white">
+                  {user.profile?.nama || user.email.split("@")[0]}
+                </span>
+              </div>
+
+              {/* PROFILE DROPDOWN */}
+              {isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-3 bg-white w-40 rounded-xl shadow-lg overflow-hidden">
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-black"
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Button
+                label="Daftar"
+                variant="solid-light"
+                onClick={handleDaftarButton}
+              />
+              <Button
+                label="Masuk"
+                variant="outline"
+                onClick={handleLoginButton}
+              />
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* MOBILE MENU */}
+      <MobileMenu
+        isMenuOpen={isMenuOpen}
+        isDropdownOpen={isDropdownOpen}
+        toggleDropdown={toggleDropdown}
+        onLoginClick={() => {
+          setIsMenuOpen(false);
+          navigate("/login");
+        }}
+        user={user}
+        onLogout={handleLogout}
+      />
+    </nav>
   );
 };
 

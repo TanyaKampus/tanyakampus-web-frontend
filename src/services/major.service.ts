@@ -126,10 +126,7 @@ export const getAllMajorCardService = async (
   };
 };
 
-/** ambil detail jurusan by id */
-export const getMajorByIdService = async (
-  id: string,
-): Promise<GetMajorByIdResponse> => {
-  const res = await api.get<GetMajorByIdResponse>(`/api/major/${id}`);
+export const getMajorByIdService = async (jurusan_id: string) => {
+  const res = await api.get(`/api/major/${jurusan_id}`);
   return res.data;
 };

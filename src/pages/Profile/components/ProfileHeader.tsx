@@ -1,6 +1,14 @@
 import Button from "@/components/Button";
 
-const ProfileHeader = () => {
+interface Props {
+  user: any;
+}
+
+const ProfileHeader = ({ user }: Props) => {
+  if (!user || !user.profile) return null;
+
+  const profile = user.profile;
+
   return (
     <div>
       <h1 className="text-3xl text-neutral font-bold">Profile Saya</h1>
@@ -12,11 +20,21 @@ const ProfileHeader = () => {
 
       <div className="mt-8 flex items-center gap-5">
         <img
-          src="https://placehold.co/200x200/png?text=Avatar"
+          src={
+            profile.foto_profil
+              ? profile.foto_profil
+              : "https://placehold.co/200x200/png?text=Avatar"
+          }
           alt="profile"
           className="w-[168px] h-[168px] rounded-full object-cover"
         />
-        <Button label="Edit Profile"/>
+
+        <div>
+          <p className="font-semibold text-lg">
+            {profile.nama || "-"}
+          </p>
+          <Button label="Edit Profile" />
+        </div>
       </div>
     </div>
   );
