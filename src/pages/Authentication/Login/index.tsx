@@ -6,9 +6,15 @@ import LogoItem from "@/components/LogoItem";
 import BubbleKiri from "@/assets/images/Bubble.png";
 import { loginService } from "@/services/auth.service";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+type ApiErrorResponse = {
+  message?: string;
+  error?: string;
+};
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,14 +28,32 @@ const Login = () => {
     try {
       const res = await loginService({ email, password });
 
-      if (res.success) {
+      // ✅ kalau backend kamu formatnya { success, data, accessToken, refreshToken }
+      if (res?.success) {
+        // ✅ SIMPAN TOKEN (PENTING!)
+        if (res.accessToken) localStorage.setItem("accessToken", res.accessToken);
+        if (res.refreshToken) localStorage.setItem("refreshToken", res.refreshToken);
+
+        // ✅ SIMPAN USER
         localStorage.setItem("user", JSON.stringify(res.data));
+
         navigate("/");
+        return;
       }
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || "Login gagal, silakan coba lagi"
-      );
+
+      // kalau success false
+      setError(res?.message || "Login gagal, silakan coba lagi");
+    } catch (err: unknown) {
+      if (axios.isAxiosError<ApiErrorResponse>(err)) {
+        setError(
+          err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Login gagal, silakan coba lagi",
+        );
+      } else {
+        setError("Login gagal, silakan coba lagi");
+      }
     } finally {
       setLoading(false);
     }
@@ -68,9 +92,7 @@ const Login = () => {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-semibold mb-1">Email</label>
               <input
                 type="email"
                 placeholder="Masukan Email kamu"
@@ -82,9 +104,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Password
-              </label>
+              <label className="block text-sm font-semibold mb-1">Password</label>
               <input
                 type="password"
                 placeholder="Masukan Password kamu"
@@ -105,12 +125,7 @@ const Login = () => {
               </div>
             </div>
 
-            {/* ERROR MESSAGE (tanpa ganggu design) */}
-            {error && (
-              <p className="text-sm text-red-500 text-center">
-                {error}
-              </p>
-            )}
+            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
             <Button
               label={loading ? "Loading..." : "Masuk"}
@@ -131,9 +146,7 @@ const Login = () => {
 
             <div className="flex items-center my-4">
               <div className="flex-1 h-px bg-neutral" />
-              <span className="px-3 text-sm text-neutral">
-                atau dengan
-              </span>
+              <span className="px-3 text-sm text-neutral">atau dengan</span>
               <div className="flex-1 h-px bg-neutral" />
             </div>
 

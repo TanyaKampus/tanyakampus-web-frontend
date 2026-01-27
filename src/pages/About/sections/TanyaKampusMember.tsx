@@ -18,7 +18,7 @@ import Member7 from "@/assets/images/Erga.png";
 const fallbackMembers: MentorCard[] = [
   { id: "1", image: Member1, name: "Rizki Maulana Ramadhan", role: "Project Manager & UI/UX", quote: "404 Not Found" },
   { id: "2", image: Member2, name: "Raden Hanif Abdul Hakim", role: "Frontend Engineer", quote: "Ga habis thinking sama ni project" },
-  { id: "3", image: Member3, name: "Rafli Alamsyah", role: "Backend Engineer", quote: "Ga habis thinking sama ni project" },
+  { id: "3", image: Member3, name: "Rafli Alamsyah", role: "Backend Engineer", quote: "Bukan suhu tapi wani di adu" },
   { id: "4", image: Member4, name: "Rizkya Putri Yustiawan", role: "System Analysis", quote: "Ga habis thinking sama ni project" },
   { id: "5", image: Member5, name: "Marva Zahra", role: "Business Analyst", quote: "Ga habis thinking sama ni project" },
   { id: "6", image: Member6, name: "M. Al-Giffari", role: "Frontend Engineer", quote: "Mikis Kird" },

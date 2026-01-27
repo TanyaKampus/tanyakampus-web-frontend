@@ -27,6 +27,8 @@ export interface LoginResponse {
     id: string;
     email: string;
   };
+  accessToken: string;   // ✅ token untuk FE
+  refreshToken: string;  // ✅ token untuk refresh
 }
 
 export interface RegisterPayload {
@@ -41,5 +43,10 @@ export interface RegisterPayload {
 export interface RegisterResponse {
   success: boolean;
   message: string;
+  data: {
+    id: string;
+    email: string;
+  };
+  accessToken: string;
+  refreshToken: string;
 }
-

@@ -1,4 +1,3 @@
-// src/pages/TanyaKampus/DetailKampus/HeroDetail.tsx
 import { useEffect, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Like from "@/assets/images/love.png";
@@ -10,6 +9,10 @@ type Props = {
     nama_kampus: string;
     jenis_kampus: string;
     foto_kampus?: string | null;
+
+    // ✅ ambil dari service
+    logo_kampus?: string | null;
+    akreditasi?: string | null;
   };
 };
 
@@ -49,9 +52,21 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
 
       <div className="flex w-full h-full justify-between items-start pt-10 relative">
         <div className="flex flex-row items-center gap-6 mt-10 z-10 relative">
-          {/* Logo dummy tetap (biar desain sama), nanti kalau backend ada logo tinggal ganti */}
-          <div className="w-40 h-40 bg-white rounded-xl shadow-sm mt-25 flex items-center justify-center text-gray-500">
-            LOGO
+          {/* ✅ LOGO dari API (UI kotaknya tetap sama) */}
+          <div className="w-40 h-40  mt-25 flex items-center justify-center text-gray-500 overflow-hidden">
+            {kampus.logo_kampus ? (
+              <img
+                src={kampus.logo_kampus}
+                alt={`Logo ${kampus.nama_kampus}`}
+                className="w-full h-full object-contain p-4"
+                onError={(e) => {
+                  // fallback kalau url logo error
+                  (e.currentTarget as HTMLImageElement).style.display = "none";
+                }}
+              />
+            ) : (
+              "LOGO"
+            )}
           </div>
 
           <button
@@ -81,6 +96,14 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
                 <span>{kampus.jenis_kampus}</span>
                 <DotSeparator />
                 <span>Indonesia</span>
+
+                {/* opsional: tampilkan akreditasi kalau mau (tidak mengubah UI besar) */}
+                {kampus.akreditasi ? (
+                  <>
+                    <DotSeparator />
+                    <span>Akreditasi {kampus.akreditasi}</span>
+                  </>
+                ) : null}
               </span>
             </div>
           </div>

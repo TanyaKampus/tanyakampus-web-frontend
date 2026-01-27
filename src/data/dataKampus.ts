@@ -12,15 +12,15 @@
 // import Telkom from "@/assets/images/TELU.jpg";
 // import LogoTelkom from "@/assets/images/TelULogo.png";
 
-export interface Major {
-  kampus_id: string;
-  nama_kampus: string;
-  jenis_kampus: string;
-  akreditasi: string;
-  alamat_kampus: string;
-  deskripsi_kampus: string;
-  foto_kampus: string;
-}
+// export interface Major {
+//   kampus_id: string;
+//   nama_kampus: string;
+//   jenis_kampus: string;
+//   akreditasi: string;
+//   alamat_kampus: string;
+//   deskripsi_kampus: string;
+//   foto_kampus: string;
+// }
 
 // export const dataKampus: Record<string, Major[]> = {
 //   Bandung: [

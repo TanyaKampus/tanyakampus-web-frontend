@@ -1,88 +1,96 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import HeroSection from "./HeroSection";
-import FilterDropdown from "./components/FilterDropdown";
-import type { Filters } from "./components/types";
 import JurusanCard from "../Home/components/JurusanCard";
+import axios from "axios";
 import {
   getAllMajorCardService,
   type MajorCard,
+  type MajorMeta,
 } from "@/services/major.service";
 
 const ITEMS_PER_PAGE = 6;
 
+type ApiErrorResponse = {
+  message?: string;
+  error?: string;
+};
+
+const emptyMeta: MajorMeta = {
+  total: 0,
+  page: 1,
+  limit: ITEMS_PER_PAGE,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
+};
+
 const TanyaJurusan = () => {
   const [majors, setMajors] = useState<MajorCard[]>([]);
+  const [meta, setMeta] = useState<MajorMeta>(emptyMeta);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
 
-  const [filters, setFilters] = useState<Filters>({
-    jenisKampus: "",
-    akreditasi: "",
-  });
+  const fetchMajors = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-  const handleFilterChange = (type: keyof Filters, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [type]: prev[type] === value ? "" : value,
-    }));
-    setCurrentPage(1); // reset page kalau filter berubah
-  };
+      const res = await getAllMajorCardService({
+        page,
+        limit: ITEMS_PER_PAGE,
+      });
 
-  useEffect(() => {
-    const fetchMajors = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const data = await getAllMajorCardService();
-        setMajors(data);
-      } catch (err) {
-        console.error(err);
-        setError("Gagal mengambil data jurusan");
-      } finally {
-        setLoading(false);
+      setMajors(res.data);
+      setMeta(res.meta);
+    } catch (err: unknown) {
+      if (axios.isAxiosError<ApiErrorResponse>(err)) {
+        setError(
+          err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Gagal mengambil data jurusan",
+        );
+      } else {
+        setError("Terjadi error tak terduga");
       }
-    };
 
+      setMajors([]);
+      setMeta(emptyMeta);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // fetch saat page berubah
+  useEffect(() => {
     fetchMajors();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-  /** =========================
-   * PAGINATION LOGIC
-   * ========================= */
-  const totalPages = Math.ceil(majors.length / ITEMS_PER_PAGE);
+  const canPrev = meta.hasPrevPage;
+  const canNext = meta.hasNextPage;
 
-  const paginatedMajors = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    return majors.slice(start, end);
-  }, [majors, currentPage]);
-
-  const handlePrev = () => {
-    setCurrentPage((p) => Math.max(p - 1, 1));
-  };
-
-  const handleNext = () => {
-    setCurrentPage((p) => Math.min(p + 1, totalPages));
-  };
+  const pageLabel = useMemo(() => {
+    const totalPages = meta.totalPages || 1;
+    return `${meta.page || page} dari ${totalPages}`;
+  }, [meta.page, meta.totalPages, page]);
 
   return (
     <section>
       <HeroSection />
 
       <div className="px-6 md:px-16 py-12">
-        <FilterDropdown filters={filters} onChange={handleFilterChange} />
-
         {loading && <p>Loading...</p>}
         {!loading && error && <p className="text-red-600">{error}</p>}
 
         {!loading && !error && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-              {paginatedMajors.map((jurusan) => (
+              {majors.map((jurusan) => (
                 <JurusanCard
                   key={jurusan.id}
                   jurusan={jurusan}
@@ -92,25 +100,30 @@ const TanyaJurusan = () => {
             </div>
 
             {/* PAGINATION */}
-            {totalPages > 1 && (
+            {(meta.totalPages ?? 1) > 1 && (
               <div className="flex justify-center items-center gap-4 mt-10">
-                <Button
-                  label="<"
-                  variant="outline-dark"
-                  onClick={handlePrev}
-                  disabled={currentPage === 1}
-                />
+                <button
+                  type="button"
+                  onClick={() => canPrev && setPage((p) => Math.max(1, p - 1))}
+                  disabled={!canPrev}
+                  className={!canPrev ? "opacity-50 cursor-not-allowed" : ""}
+                >
+                  <Button label="<" variant="outline-dark" />
+                </button>
 
-                <span className="text-neutral font-medium">
-                  {currentPage} dari {totalPages}
-                </span>
+                <span className="text-neutral font-medium">{pageLabel}</span>
 
-                <Button
-                  label=">"
-                  variant="outline-dark"
-                  onClick={handleNext}
-                  disabled={currentPage === totalPages}
-                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    canNext &&
+                    setPage((p) => Math.min(meta.totalPages || p + 1, p + 1))
+                  }
+                  disabled={!canNext}
+                  className={!canNext ? "opacity-50 cursor-not-allowed" : ""}
+                >
+                  <Button label=">" variant="outline-dark" />
+                </button>
               </div>
             )}
           </>

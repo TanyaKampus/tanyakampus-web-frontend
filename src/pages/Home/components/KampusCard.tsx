@@ -1,15 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import type { Major } from "@/data/dataKampus";
+import type { Campus } from "@/services/campus.service";
 
 interface KampusCardProps {
-  kampus: Major;
-  className?: string
+  kampus: Campus;
+  className?: string;
 }
 
 const KampusCard: React.FC<KampusCardProps> = ({ kampus, className = "" }) => {
   const navigate = useNavigate();
-
   const handleClick = () => navigate(`/tanya-kampus/${kampus.kampus_id}`);
 
   return (
@@ -37,9 +36,9 @@ const KampusCard: React.FC<KampusCardProps> = ({ kampus, className = "" }) => {
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3 text-left z-10">
         <div className="flex items-center gap-3">
           <img
-            src={kampus.foto_kampus}
+            src={kampus.logo_kampus} // ✅ pakai logo_kampus, bukan foto_kampus
             alt={`${kampus.nama_kampus} Logo`}
-            className="w-14 h-14 object-contain p-1"
+            className="w-14 h-14 object-contain p-1 rounded-lg"
           />
           <p className="text-white font-semibold text-lg max-w-[250px]">
             {kampus.nama_kampus}

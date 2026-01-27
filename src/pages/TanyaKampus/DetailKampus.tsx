@@ -8,6 +8,7 @@ import ProgramStudiKampus from "./ProgramStudiKampus";
 import { FiMapPin, FiPhone, FiGlobe } from "react-icons/fi";
 import Instagram from "@/assets/images/Instagram.png";
 
+import axios from "axios";
 import {
   getCampusByIdService,
   type GetCampusByIdResponse,
@@ -16,9 +17,7 @@ import {
 const KampusDetail = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [kampus, setKampus] = useState<GetCampusByIdResponse["data"] | null>(
-    null,
-  );
+  const [kampus, setKampus] = useState<GetCampusByIdResponse["data"] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -31,11 +30,21 @@ const KampusDetail = () => {
         setError("");
 
         const res = await getCampusByIdService(id);
+        console.log("DETAIL CAMPUS:", res.data); // cek maps_url & logo_kampus
+
         setKampus(res.data);
-      } catch (e: any) {
-        console.error(e);
+      } catch (e: unknown) {
         setKampus(null);
-        setError(e?.response?.data?.message || "Gagal mengambil detail kampus");
+
+        if (axios.isAxiosError(e)) {
+          const msg =
+            (e.response?.data as { message?: string } | undefined)?.message ||
+            e.message ||
+            "Gagal mengambil detail kampus";
+          setError(msg);
+        } else {
+          setError("Gagal mengambil detail kampus");
+        }
       } finally {
         setLoading(false);
       }
@@ -50,7 +59,6 @@ const KampusDetail = () => {
 
   return (
     <section>
-      {/* ✅ Hero pakai data dari API */}
       <HeroDetail kampus={kampus} />
 
       <div className="pl-20">
@@ -60,42 +68,73 @@ const KampusDetail = () => {
         </p>
       </div>
 
-      {/* ✅ Program studi pakai data jurusan dari API */}
       <section className="mt-50">
-        <ProgramStudiKampus jurusan={kampus.jurusan || []} kampusNama={kampus.nama_kampus}/>
+        <ProgramStudiKampus
+          jurusan={kampus.jurusan || []}
+          kampusNama={kampus.nama_kampus}
+        />
       </section>
 
-      {/* ⚠️ Bagian alamat kamu masih dari data statis.
-          Kalau backend belum punya alamat/mapEmbed, biarkan dulu (desain tetap).
-          Nanti kalau backend sudah ada, baru sambungkan. */}
       <section className="mt-12 mb-60">
         <h2 className="text-xl font-md pl-27">Alamat Kampus</h2>
 
         <div className="flex justify-center mt-4">
           <iframe
-            // sementara dummy biar UI tetap jalan
-            src={"https://www.google.com/maps?q=Indonesia&output=embed"}
+            src={
+              kampus.maps_url?.trim()
+                ? kampus.maps_url
+                : "https://www.google.com/maps?q=Indonesia&output=embed"
+            }
             className="w-full max-w-[82rem] h-90 rounded-lg"
             loading="lazy"
-          ></iframe>
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            title={`Maps ${kampus.nama_kampus}`}
+          />
         </div>
 
         <div className="flex flex-col gap-2 mt-10 pl-30 text-gray-700">
           <div className="flex flex-wrap gap-6">
             <p className="flex items-center gap-2">
-              <FiMapPin className="text-[#383838]" /> {"Alamat belum tersedia"}
+              <FiMapPin className="text-[#383838]" />{" "}
+              {kampus.alamat_kampus || "-"}
             </p>
             <p className="flex items-center gap-2">
-              <FiPhone className="text-[#383838]" /> Telepon: {"-"}
+              <FiPhone className="text-[#383838]" /> Telepon:{" "}
+              {kampus.no_telepon || "-"}
             </p>
             <p className="flex items-center gap-2">
-              <FiGlobe className="text-[#383838]" /> Website: {"-"}
+              <FiGlobe className="text-[#383838]" /> Website:{" "}
+              {kampus.website ? (
+                <a
+                  href={kampus.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  {kampus.website}
+                </a>
+              ) : (
+                "-"
+              )}
             </p>
           </div>
 
           <p className="flex items-center gap-2 mt-2">
             <img src={Instagram} alt="Instagram" className="w-5 h-5" />
-            Instagram: {"-"}
+            Instagram:{" "}
+            {kampus.instagram ? (
+              <a
+                href={kampus.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                {kampus.instagram}
+              </a>
+            ) : (
+              "-"
+            )}
           </p>
         </div>
       </section>
