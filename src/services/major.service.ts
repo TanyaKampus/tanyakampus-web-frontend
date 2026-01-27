@@ -2,8 +2,8 @@
 import api from "./api";
 
 /** =========================
- *  Types dari backend kamu (Jurusan select)
- *  ========================= */
+ * Types dari backend kamu (Jurusan select)
+ * ========================= */
 export type BidangDTO = {
   bidang_id: string;
   nama_bidang: string;
@@ -24,11 +24,22 @@ export type MajorDTO = {
   updatedAt?: string;
 };
 
-/** Response controller backend kamu */
+/** meta pagination dari backend */
+export type MajorMeta = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+
+/** Response controller backend kamu (update: tambah meta) */
 export type GetAllMajorResponse = {
   success: boolean;
   message: string;
   data: MajorDTO[];
+  meta?: MajorMeta; // ✅ optional biar gak error kalau endpoint lama belum ada
 };
 
 export type GetMajorByIdResponse = {
@@ -38,36 +49,32 @@ export type GetMajorByIdResponse = {
 };
 
 /** =========================
- *  Format yang dipakai UI Card (frontend)
- *  ========================= */
+ * Format yang dipakai UI Card (frontend)
+ * ========================= */
 export type MajorCard = {
   id: string;
   name: string;
   description: string;
   icon: string;
-  bidangName: string;   // contoh: "TEKNIK_DAN_ILMU_KOMPUTER"
+  bidangName: string;
   bidangId: string;
 };
 
-/** fallback icon (taruh file di /public/images/) */
+/** fallback icon */
 const FALLBACK_ICON = "/images/placeholder-major.png";
 
-/** kalau icon dari backend berupa path relatif, jadikan absolute */
 const normalizeIcon = (src?: string | null) => {
   const val = (src || "").trim();
   if (!val) return FALLBACK_ICON;
 
-  // sudah absolute
   if (val.startsWith("http://") || val.startsWith("https://")) return val;
 
-  // base backend
   const base = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
   if (!base) return val.startsWith("/") ? val : `/${val}`;
 
   return val.startsWith("/") ? `${base}${val}` : `${base}/${val}`;
 };
 
-/** mapper DTO -> MajorCard */
 const toMajorCard = (m: MajorDTO): MajorCard => ({
   id: m.jurusan_id,
   name: m.nama_jurusan,
@@ -77,25 +84,52 @@ const toMajorCard = (m: MajorDTO): MajorCard => ({
   bidangId: m.bidang?.bidang_id || "",
 });
 
-/** =========================
- *  Services
- *  ========================= */
+type GetAllMajorParams = {
+  page?: number;
+  limit?: number;
+};
+
+type GetAllMajorCardResult = {
+  data: MajorCard[];
+  meta: MajorMeta;
+};
+
+const emptyMeta = (limit: number): MajorMeta => ({
+  total: 0,
+  page: 1,
+  limit,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
+});
 
 /** ambil semua jurusan (raw response) */
-export const getAllMajorService = async (): Promise<GetAllMajorResponse> => {
-  const res = await api.get<GetAllMajorResponse>("/api/major");
+export const getAllMajorService = async (
+  params?: GetAllMajorParams,
+): Promise<GetAllMajorResponse> => {
+  const res = await api.get<GetAllMajorResponse>("/api/major", { params });
   return res.data;
 };
 
-/** ambil semua jurusan (langsung siap buat card UI) */
-export const getAllMajorCardService = async (): Promise<MajorCard[]> => {
-  const res = await api.get<GetAllMajorResponse>("/api/major");
-  const items = res.data?.data;
-  return Array.isArray(items) ? items.map(toMajorCard) : [];
+/** ambil jurusan siap card + meta pagination */
+export const getAllMajorCardService = async (
+  params?: GetAllMajorParams,
+): Promise<GetAllMajorCardResult> => {
+  const res = await api.get<GetAllMajorResponse>("/api/major", { params });
+
+  const items = Array.isArray(res.data?.data) ? res.data.data : [];
+  const meta = res.data?.meta ?? emptyMeta(params?.limit ?? 6);
+
+  return {
+    data: items.map(toMajorCard),
+    meta,
+  };
 };
 
 /** ambil detail jurusan by id */
-export const getMajorByIdService = async (id: string): Promise<GetMajorByIdResponse> => {
+export const getMajorByIdService = async (
+  id: string,
+): Promise<GetMajorByIdResponse> => {
   const res = await api.get<GetMajorByIdResponse>(`/api/major/${id}`);
   return res.data;
 };

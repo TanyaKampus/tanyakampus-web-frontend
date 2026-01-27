@@ -1,33 +1,79 @@
-import { useEffect, useState } from "react";
+// src/pages/Home/RecommendationSection.tsx
+import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
-import CampusCard from "@/components/CampusCard";
+import CampusCard from "../components/KampusCard";
 import Vector from "@/assets/images/RecomVector.png";
 import KuraKura from "@/assets/images/KuraKura.png";
 import { useNavigate } from "react-router-dom";
-import { getAllCampus } from "@/services/campus.service";
-import type { CampusCardProps } from "@/services/campus.service";
+import { getAllCampus, type Campus } from "@/services/campus.service";
+import axios from "axios";
 
 const SLIDE_INTERVAL = 4000;
 const FADE_DURATION = 500;
 
+type ApiErrorResponse = {
+  message?: string;
+  error?: string;
+};
+
+function extractCampuses(payload: unknown): Campus[] {
+  // kasus 1: API langsung array
+  if (Array.isArray(payload)) return payload as Campus[];
+
+  // kasus 2: API bungkus di object
+  if (payload && typeof payload === "object") {
+    const obj = payload as Record<string, unknown>;
+
+    const candidates = [
+      obj.data, // { data: [...] }
+      obj.items, // { items: [...] }
+      (obj.data && typeof obj.data === "object"
+        ? (obj.data as Record<string, unknown>).items
+        : undefined), // { data: { items: [...] } }
+    ];
+
+    for (const c of candidates) {
+      if (Array.isArray(c)) return c as Campus[];
+    }
+  }
+
+  return [];
+}
+
 const RecommendationSection = () => {
   const navigate = useNavigate();
-  const [campuses, setCampuses] = useState<CampusCardProps[]>([]);
+
+  const [campuses, setCampuses] = useState<Campus[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const handleButtonClick = () => {
-    navigate("/tanya-kampus");
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleButtonClick = () => navigate("/tanya-kampus");
 
   useEffect(() => {
     const fetchCampuses = async () => {
       try {
-        const data = await getAllCampus();
-        setCampuses(data);
-      } catch (error) {
-        console.error("Gagal mengambil data kampus:", error);
+        setLoading(true);
+        setError("");
+
+        const res = await getAllCampus();
+        // ✅ getAllCampus boleh balikin array / object -> kita normalize
+        const list = extractCampuses(res);
+        setCampuses(list);
+      } catch (err) {
+        if (axios.isAxiosError<ApiErrorResponse>(err)) {
+          const msg =
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Gagal mengambil data kampus";
+          setError(msg);
+        } else {
+          setError("Terjadi error tak terduga");
+        }
+        setCampuses([]);
       } finally {
         setLoading(false);
       }
@@ -36,7 +82,10 @@ const RecommendationSection = () => {
     fetchCampuses();
   }, []);
 
-  // 🔁 Slider logic (tetap sama)
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [campuses.length]);
+
   useEffect(() => {
     if (campuses.length <= 3) return;
 
@@ -50,16 +99,16 @@ const RecommendationSection = () => {
     }, SLIDE_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [campuses]);
+  }, [campuses.length]);
 
-  if (loading) {
-    return <p className="text-center mt-32">Loading rekomendasi kampus...</p>;
-  }
+  const displayCampuses = useMemo(() => {
+    if (!campuses.length) return [];
+    return Array.from({ length: 3 }, (_, i) => campuses[(currentIndex + i) % campuses.length]);
+  }, [campuses, currentIndex]);
 
-  const displayCampuses = Array.from(
-    { length: 3 },
-    (_, i) => campuses[(currentIndex + i) % campuses.length]
-  );
+  if (loading) return <p className="text-center mt-32">Loading rekomendasi kampus...</p>;
+  if (!loading && error) return <p className="text-center mt-32 text-red-600">{error}</p>;
+  if (!loading && !error && !campuses.length) return <p className="text-center mt-32">Data kampus kosong.</p>;
 
   return (
     <section className="relative px-6 md:px-16 lg:px-32 mt-72 overflow-hidden">
@@ -99,18 +148,16 @@ const RecommendationSection = () => {
             isFading ? "opacity-0" : "opacity-100"
           }`}
         >
-          {displayCampuses.map((campus, i) => {
+          {displayCampuses.map((kampus, i) => {
             const isCenter = i === 1;
             return (
               <div
-                key={campus.kampus_id}
+                key={String(kampus.kampus_id)} // ✅ aman
                 className={`transition-all duration-500 ease-in-out ${
-                  isCenter
-                    ? "scale-110 -translate-y-4 z-10"
-                    : "scale-90 blur-xs opacity-70"
+                  isCenter ? "scale-110 -translate-y-4 z-10" : "scale-90 blur-xs opacity-70"
                 }`}
               >
-                <CampusCard kampus={campus} />
+                <CampusCard kampus={kampus} />
               </div>
             );
           })}
