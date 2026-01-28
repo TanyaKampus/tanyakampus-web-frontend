@@ -18,6 +18,8 @@ import type {
   GetResultBackendResponse,
   MajorCardUI,
 } from "@/utils/interface";
+import ResultPDF from "./components/ResultPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 // helper kecil biar aman jadi array paragraf
 const toParagraphs = (text?: string | null) => {
@@ -61,7 +63,9 @@ const HasilAkhir: React.FC = () => {
 
         setRaw(res.data ?? null);
       } catch (e: any) {
-        setError(e?.response?.data?.message || e?.message || "Terjadi kesalahan.");
+        setError(
+          e?.response?.data?.message || e?.message || "Terjadi kesalahan.",
+        );
         setRaw(null);
       } finally {
         setLoading(false);
@@ -108,7 +112,11 @@ const HasilAkhir: React.FC = () => {
 
   // buat judul + deskripsi untuk TestResultCard
   const facultyName = useMemo(() => {
-    return winnerBidang?.bidang?.nama_bidang || winnerBidang?.nama_bidang || "Hasil Tes";
+    return (
+      winnerBidang?.bidang?.nama_bidang ||
+      winnerBidang?.nama_bidang ||
+      "Hasil Tes"
+    );
   }, [winnerBidang]);
 
   const description = useMemo(() => {
@@ -133,20 +141,24 @@ const HasilAkhir: React.FC = () => {
 
     const selectedBidangId = raw?.bidang_terpilih;
 
-    return items
-      .map((it) => {
-        const jur = it.jurusan;
-        const nama = jur?.nama_jurusan ?? "Jurusan";
-        const bidangId = jur?.bidang_id ?? jur?.bidang?.bidang_id ?? null;
+    return (
+      items
+        .map((it) => {
+          const jur = it.jurusan;
+          const nama = jur?.nama_jurusan ?? "Jurusan";
+          const bidangId = jur?.bidang_id ?? jur?.bidang?.bidang_id ?? null;
 
-        return {
-          id: jur?.jurusan_id ?? it.jurusan_id ?? it.id,
-          nama,
-          isRecommended: Boolean(selectedBidangId && bidangId === selectedBidangId),
-        };
-      })
-      // optional: tampilkan recommended dulu
-      .sort((a, b) => Number(b.isRecommended) - Number(a.isRecommended));
+          return {
+            id: jur?.jurusan_id ?? it.jurusan_id ?? it.id,
+            nama,
+            isRecommended: Boolean(
+              selectedBidangId && bidangId === selectedBidangId,
+            ),
+          };
+        })
+        // optional: tampilkan recommended dulu
+        .sort((a, b) => Number(b.isRecommended) - Number(a.isRecommended))
+    );
   }, [raw]);
 
   // =========================
@@ -182,7 +194,11 @@ const HasilAkhir: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 sm:p-8 relative">
-      <img src={vector} className="absolute top-0 right-0" alt="vector" />
+      <img
+        src={vector}
+        className="absolute top-0 right-0 pointer-events-none select-none"
+        alt="vector"
+      />
 
       {error && (
         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
@@ -198,7 +214,9 @@ const HasilAkhir: React.FC = () => {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Rekomendasi Jurusan */}
             <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow border">
-              <h3 className="text-xl font-semibold mb-4">Rekomendasi Jurusan</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                Rekomendasi Jurusan
+              </h3>
 
               {safeMajors.length === 0 ? (
                 <div className="text-sm text-gray-500">
@@ -250,14 +268,55 @@ const HasilAkhir: React.FC = () => {
             Ulang Tes
           </button>
 
-          <button
-            onClick={() => console.log("Download PDF")}
-            className="w-full bg-[#00897b] text-white py-4 rounded-lg flex items-center justify-center gap-2"
-            type="button"
-          >
-            <img src={downloadImg} className="h-5 w-5" alt="download" />
-            Unduh Hasil
-          </button>
+          <div className="w-full">
+            {raw ? (
+              <PDFDownloadLink
+                document={
+                  <ResultPDF
+                    title={facultyName}
+                    description={description}
+                    meta={{
+                      riwayat_id: raw.riwayat_id,
+                      quizName: raw.quiz?.nama_quiz ?? "Quiz",
+                      status: raw.status_quiz,
+                      tanggal_mulai: raw.tanggal_mulai,
+                      tanggal_selesai: raw.tanggal_selesai,
+                    }}
+                    fieldResults={fieldResults}
+                    majors={safeMajors}
+                    campuses={campusRecommendations}
+                  />
+                }
+                fileName={`hasil-tes-${riwayat_id}.pdf`}
+              >
+                {({ loading: pdfLoading }) => (
+                  <button
+                    disabled={pdfLoading}
+                    className={`w-full bg-[#00897b] cursor-pointer text-white py-4 rounded-lg flex items-center justify-center gap-2 ${
+                      pdfLoading ? "opacity-60 cursor-not-allowed" : ""
+                    }`}
+                    type="button"
+                  >
+                    <img
+                      src={downloadImg}
+                      className="h-5 w-5 z-50"
+                      alt="download"
+                    />
+                    {pdfLoading ? "Membuat PDF..." : "Unduh Hasil"}
+                  </button>
+                )}
+              </PDFDownloadLink>
+            ) : (
+              <button
+                disabled
+                className="w-full bg-[#00897b] text-white py-4 rounded-lg opacity-60 cursor-not-allowed flex items-center justify-center gap-2"
+                type="button"
+              >
+                <img src={downloadImg} className="h-5 w-5" alt="download" />
+                Unduh Hasil
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

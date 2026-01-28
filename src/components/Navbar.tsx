@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -66,6 +67,7 @@ const Navbar = () => {
       navigate("/");
     } catch (err: any) {
       toast.error("Gagal logout. Silakan coba lagi.");
+      console.error(err)
     } finally {
       setLoggingOut(false);
     }
@@ -90,7 +92,7 @@ const Navbar = () => {
 
   return (
     <nav className={navClass}>
-      <div className="container mx-auto px-6 md:px-16 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-6 md:px-16 py-5 flex justify-between items-center">
         <LogoItem />
 
         <button className="md:hidden text-2xl" onClick={toggleMenu}>
