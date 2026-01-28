@@ -1,8 +1,11 @@
 import BG from "@/assets/images/HeroWave.png";
 import Button from "@/components/Button";
 import { RiWhatsappFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="relative w-full h-screen flex items-center justify-center text-tertiary-100">
       <img
@@ -20,7 +23,7 @@ const HeroSection = () => {
           bareng <span className="font-bold">TanyaKampus</span>
         </p>
         <div className="flex gap-4 items-center justify-center">
-          <Button label="Mulai Test" />
+          <Button label="Mulai Test" onClick={() => navigate('/category-test')}/>
           <Button
             label="Konsultasi Sekarang"
             variant="outline"

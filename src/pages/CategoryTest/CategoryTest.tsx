@@ -85,7 +85,7 @@ const cards: CardItem[] = useMemo(() => {
 
       <HeroSection />
 
-      <div className="relative z-20 mt-10">
+      <div className="relative z-20 mt-10 h-screen">
         {loading && (
           <div className="text-center text-gray-500">Loading quiz...</div>
         )}

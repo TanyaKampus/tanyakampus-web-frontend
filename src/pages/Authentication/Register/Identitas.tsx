@@ -8,6 +8,7 @@ import BubbleKiri from "@/assets/images/Bubblekr.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registerService } from "@/services/auth.service";
+import { toastError, toastSuccess } from "@/components/Toast";
 
 const Identitas = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Identitas = () => {
   });
 
   const handleSubmit = async () => {
-    if (!email) return alert("Email tidak ditemukan");
+    if (!email) return toastError("Email tidak ditemukan");
     
     try {
       await registerService({
@@ -32,9 +33,11 @@ const Identitas = () => {
       });
       
       sessionStorage.removeItem("register_email");
+      toastSuccess("Registrasi Berhasil!")
       navigate('/succes')
     } catch (err) {
       console.error("Register gagal", err);
+      toastError("Registasi Gagal!")
     }
   };
   return (
@@ -108,7 +111,7 @@ const Identitas = () => {
                   type="tel"
                   placeholder="82xxxxxxxxx"
                   inputMode="tel"
-                  pattern="[0-9]{9,15}"
+                  // pattern="[0-9]{9,15}"
                   maxLength={15}
                   autoComplete="tel"
                   required
@@ -161,7 +164,7 @@ const Identitas = () => {
                   <input
                     type="radio"
                     name="gender"
-                    value="perempuan"
+                    value="Perempuan"
                     className="accent-teal-600 w-4 h-4"
                     required
                     onChange={(e) =>
