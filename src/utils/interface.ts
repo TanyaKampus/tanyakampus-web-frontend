@@ -117,7 +117,7 @@ export type GetQuestionsResponse = {
 
 export type FieldResultDTO = {
   bidang_id: string;
-  nama_bidang?: string; // ada di response
+  nama_bidang?: string; 
   skor_bidang: number;
   skor_tiebreaker: number;
   skor_total: number;
@@ -128,6 +128,7 @@ export type FieldResultDTO = {
   bidang?: {
     bidang_id: string;
     nama_bidang: string;
+    foto_bidang: string | null
     deskripsi?: string | null;
   } | null;
 };
@@ -225,10 +226,10 @@ export type QuizHistoryMeItemDTO = {
   tanggal_mulai: string;
   tanggal_selesai: string | null;
   quiz: {
+    quiz_id: string;
     nama_quiz: string;
   };
   bidang_terpilih: string | null;
-  quiz_id: string;
 };
 
 export type GetMyQuizHistoryResponseDTO = {

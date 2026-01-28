@@ -24,7 +24,7 @@ const FilterDropdown = ({ filters, onChange }: FilterDropdownProps) => {
 
   const getSelectedText = () => {
     const { jenisKampus, akreditasi } = filters;
-    if (!jenisKampus && !akreditasi) return "Pilih Kategori Jurusan";
+    if (!jenisKampus && !akreditasi) return "Pilih Kategori Kampus";
     const parts = [jenisKampus, akreditasi && `Akreditasi ${akreditasi}`].filter(Boolean);
     return parts.join(", ");
   };

@@ -3,11 +3,13 @@ import React, { useMemo } from "react";
 interface TestResultCardProps {
   facultyName?: string;
   description?: string[];
+  imageUrl?: string | null; 
 }
 
 const TestResultCard: React.FC<TestResultCardProps> = ({
   facultyName = "Hasil Tes",
   description = [],
+  imageUrl = null,
 }) => {
   const safeDescription = useMemo(
     () => (Array.isArray(description) ? description : []),
@@ -20,7 +22,24 @@ const TestResultCard: React.FC<TestResultCardProps> = ({
         {facultyName}
       </h2>
 
-      <div className="w-full h-80 bg-gray-200 rounded-lg mb-6" />
+      <div className="w-full h-80 rounded-lg mb-6 overflow-hidden bg-gray-100">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={facultyName}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            Foto bidang belum tersedia
+          </div>
+        )}
+      </div>
 
       <div className="space-y-4 text-gray-600">
         {safeDescription.length === 0 ? (
