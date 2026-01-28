@@ -1,29 +1,39 @@
-// src/pages/HasilAkhir/components/TestResultCard.tsx
-
-import React from 'react';
+import React, { useMemo } from "react";
 
 interface TestResultCardProps {
-  facultyName: string;
-  description: string[];
+  facultyName?: string;
+  description?: string[];
 }
 
-const TestResultCard: React.FC<TestResultCardProps> = ({ facultyName, description }) => {
+const TestResultCard: React.FC<TestResultCardProps> = ({
+  facultyName = "Hasil Tes",
+  description = [],
+}) => {
+  const safeDescription = useMemo(
+    () => (Array.isArray(description) ? description : []),
+    [description]
+  );
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-      {/* Faculty Name di tengah dan warna #C44F2C */}
       <h2 className="text-2xl font-extrabold text-center text-[#C44F2C] mb-4">
         {facultyName}
       </h2>
-      
-      {/* Gambar placeholder */}
-      <div className="w-full h-80 bg-gray-200 rounded-lg mb-6"></div>
+
+      <div className="w-full h-80 bg-gray-200 rounded-lg mb-6" />
 
       <div className="space-y-4 text-gray-600">
-        {description.map((paragraph, index) => (
-          <p key={index} className="leading-relaxed">
-            {paragraph}
+        {safeDescription.length === 0 ? (
+          <p className="leading-relaxed text-gray-500">
+            Deskripsi hasil belum tersedia.
           </p>
-        ))}
+        ) : (
+          safeDescription.map((paragraph, index) => (
+            <p key={index} className="leading-relaxed">
+              {paragraph}
+            </p>
+          ))
+        )}
       </div>
     </div>
   );

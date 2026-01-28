@@ -1,122 +1,267 @@
-// // src/pages/HasilAkhir/index.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-// import React from "react";
-// import TestResultCard from "./components/TestResultCard";
-// import MajorRecommendationCard from "./components/MajorRecommendationCard";
-// import CampusRecommendationCard from "./components/CampusRecommendationCard";
-// import { hasilAkhirData } from "../../data/hasilAkhirData";
-// import loading from "../../assets/images/loading.png"
-// import download from "../../assets/images/download.png"
-// import vector from "../../assets/images/JurusanVector.png"
-// import type {
-//   CampusRecommendation,
-//   MajorRecommendation,
-// } from "@/data/hasilAkhirData";
+import TestResultCard from "./components/TestResultCard";
+import MajorRecommendationCard from "./components/MajorRecommendationCard";
+import CampusRecommendationCard from "./components/CampusRecommendationCard";
+import RadarBidangChart from "./components/RadarBidangChart";
 
+import loadingImg from "../../assets/images/loading.png";
+import downloadImg from "../../assets/images/download.png";
+import vector from "../../assets/images/JurusanVector.png";
 
-// const HasilAkhir: React.FC = () => {
-//   const {
-//     facultyName,
-//     description,
-//     majorRecommendations,
-//     campusRecommendations,
-//   } = hasilAkhirData;
+import { getResultService } from "@/services/quiz.service";
+import type {
+  CampusCardUI,
+  FieldResultDTO,
+  GetResultBackendResponse,
+  MajorCardUI,
+} from "@/utils/interface";
 
-//   return (
-//     <div className="container mx-auto p-4 sm:p-8">
-//       <div className="flex flex-col lg:flex-row gap-8">
-//           <div className="absolute top-0 right-0">
-//     <img src={vector} alt="Vector" />
-//   </div>
-//         {/* Konten Kiri (besar) */}
-//         <div className="lg:w-2/3 flex flex-col gap-8">
-//           {/* HASIL TES */}
-//           <TestResultCard facultyName={facultyName} description={description} />
+// helper kecil biar aman jadi array paragraf
+const toParagraphs = (text?: string | null) => {
+  if (!text) return [];
+  // split by newline, rapihin, buang kosong
+  return text
+    .split(/\r?\n+/g)
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
 
-//           <div className="flex flex-col lg:flex-row gap-8">
-//             <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col">
-//               <h3 className="text-xl font-semibold text-gray-800 mb-4">
-//                 Rekomendasi Jurusan:
-//               </h3>
-//               <hr className="mb-4 border-t border-gray-300" />
-//               <div className="flex flex-col gap-3 flex-1">
-//                 {majorRecommendations
-//                   .filter((major) => major.isRecommended)
-//                   .map((major: MajorRecommendation) => (
-//                     <MajorRecommendationCard key={major.id} major={major} />
-//                   ))}
-//               </div>
-//               <hr className="mt-4 mb-4 border-t border-gray-300" />
-//               <button
-//                 className="w-full py-3 bg-[#C44F2C] text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out hover:bg-[#a84424]"
-//                 onClick={() => console.log("Lihat semua jurusan lainnya")}
-//               >
-//                 Lihat Jurusan Lainnya
-//               </button>
-//             </div>
+const HasilAkhir: React.FC = () => {
+  const navigate = useNavigate();
+  const { riwayat_id = "" } = useParams<{ riwayat_id: string }>();
 
-//             <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col">
-//               <h3 className="text-xl text-center font-semibold text-gray-800 mb-4">
-//                 Diagram Bidang:
-//               </h3>
-//               <hr className="mb-4 border-t border-gray-300" />{" "}
-//               {/* Pindah hr agar di bawah judul */}
-//               {/* <div className="flex-1 w-full bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 min-h-[300px]">
-//                 [Placeholder untuk Chart/Diagram]
-//               </div> */}
-//             </div>
-//           </div>
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
-//           {/* Rekomendasi Kampus (Full Width) */}
-//           <div className="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-//             <div className="flex items-center mb-4">
-//               <h3 className="text-xl font-semibold text-gray-800 flex-1">
-//                 Rekomendasi Kampus:
-//               </h3>
-//               <button className="py-3 px-3 text-sm font-medium bg-[#C44F2C] text-white rounded-lg mr-12">
-//                 Lihat Kampus Lainnya
-//               </button>
-//             </div>
+  // simpan raw data backend
+  const [raw, setRaw] = useState<GetResultBackendResponse["data"] | null>(null);
 
-//             <div className="flex flex-wrap -m-2">
-//               {campusRecommendations.map((campus: CampusRecommendation) => (
-//                 <CampusRecommendationCard key={campus.id} campus={campus} />
-//               ))}
-//             </div>
-//           </div>
-//         </div>
+  useEffect(() => {
+    if (!riwayat_id) {
+      setError("Riwayat ID tidak ditemukan.");
+      setLoading(false);
+      return;
+    }
 
-//         {/* Sidebar Kanan */}
-//         <div className="lg:w-1/3 flex flex-col gap-6">
-//           {/* Pilihan Aksi */}
-//           <div className="p-6">
+    const fetchResult = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-//             {/* Tombol 1: Ulang Tes - Bordered (Mirip desain) */}
-//             <button
-//               className="w-50 flex items-center justify-center gap-4 py-4 px-4 mb-4 text-lg font-semibold border-2 border-[#00897b] text-[#00897b] rounded-lg hover:bg-teal-50 transition-colors shadow-sm"
-//               onClick={() => console.log("Mengulang Tes")}
-//             >
-//               {/* Menggunakan ikon yang sesuai dengan FA (Font Awesome) */}
-//               <i className="fas fa-redo text-2xl"></i>
-//              <img src={loading} />
-//               Ulang Tes
-//             </button>
+        const res = await getResultService(riwayat_id);
 
-//             {/* Tombol 2: Unduh Hasil - Solid Background (Mirip desain) */}
-//             <button
-//               className="w-50 flex items-center justify-center gap-4 py-4 px-4 text-lg font-semibold bg-[#00897b] text-white rounded-lg hover:bg-[#006b5e] transition-colors shadow-md"
-//               onClick={() => console.log("Mengunduh Hasil")}
-//             >
-//               {/* Menggunakan ikon yang sesuai dengan FA (Font Awesome) */}
-//               <i className="fas fa-download text-lg"></i>
-//               <img src={download} />
-//               Unduh Hasil
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+        if (!res?.success) {
+          setError(res?.message || "Gagal mengambil hasil.");
+          setRaw(null);
+          return;
+        }
 
-// export default HasilAkhir;
+        setRaw(res.data ?? null);
+      } catch (e: any) {
+        setError(e?.response?.data?.message || e?.message || "Terjadi kesalahan.");
+        setRaw(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResult();
+  }, [riwayat_id]);
+
+  // =========================
+  // ✅ Mapping backend -> FieldResultDTO untuk RadarBidangChart
+  // =========================
+  const fieldResults: FieldResultDTO[] = useMemo(() => {
+    const hasil = raw?.hasilBidang;
+    if (!Array.isArray(hasil)) return [];
+
+    return hasil.map((r) => ({
+      bidang_id: r.bidang_id,
+      nama_bidang: r.bidang?.nama_bidang, // optional sesuai interface kamu
+      skor_bidang: Number(r.skor_bidang ?? 0),
+      skor_tiebreaker: Number(r.skor_tiebreaker ?? 0),
+      skor_total: Number(r.skor_total ?? 0),
+      persentase: Number(r.persentase ?? 0),
+      is_winner: Boolean(r.is_winner),
+      bidang: r.bidang
+        ? {
+            bidang_id: r.bidang.bidang_id,
+            nama_bidang: r.bidang.nama_bidang,
+            deskripsi: r.bidang.deskripsi ?? null,
+          }
+        : null,
+    }));
+  }, [raw]);
+
+  // ambil pemenang bidang
+  const winnerBidang = useMemo(() => {
+    const win = fieldResults.find((x) => x.is_winner);
+    if (win) return win;
+    // fallback: cari sesuai bidang_terpilih
+    const selectedId = raw?.bidang_terpilih;
+    if (selectedId) return fieldResults.find((x) => x.bidang_id === selectedId);
+    return undefined;
+  }, [fieldResults, raw?.bidang_terpilih]);
+
+  // buat judul + deskripsi untuk TestResultCard
+  const facultyName = useMemo(() => {
+    return winnerBidang?.bidang?.nama_bidang || winnerBidang?.nama_bidang || "Hasil Tes";
+  }, [winnerBidang]);
+
+  const description = useMemo(() => {
+    const desc = winnerBidang?.bidang?.deskripsi ?? null;
+    const paragraphs = toParagraphs(desc);
+    // fallback kalau deskripsi kosong
+    if (paragraphs.length > 0) return paragraphs;
+
+    return [
+      "Berikut adalah bidang/jurusan/kampus yang direkomendasikan berdasarkan hasil tes kamu.",
+      "Silakan cek rekomendasi jurusan dan kampus di bawah ya.",
+    ];
+  }, [winnerBidang]);
+
+  // =========================
+  // ✅ Mapping hasilJurusan -> MajorCardUI (untuk MajorRecommendationCard)
+  // isRecommended: true untuk jurusan yang bidangnya sama dengan bidang terpilih
+  // =========================
+  const safeMajors: MajorCardUI[] = useMemo(() => {
+    const items = raw?.hasilJurusan;
+    if (!Array.isArray(items)) return [];
+
+    const selectedBidangId = raw?.bidang_terpilih;
+
+    return items
+      .map((it) => {
+        const jur = it.jurusan;
+        const nama = jur?.nama_jurusan ?? "Jurusan";
+        const bidangId = jur?.bidang_id ?? jur?.bidang?.bidang_id ?? null;
+
+        return {
+          id: jur?.jurusan_id ?? it.jurusan_id ?? it.id,
+          nama,
+          isRecommended: Boolean(selectedBidangId && bidangId === selectedBidangId),
+        };
+      })
+      // optional: tampilkan recommended dulu
+      .sort((a, b) => Number(b.isRecommended) - Number(a.isRecommended));
+  }, [raw]);
+
+  // =========================
+  // ✅ Mapping hasilKampus -> CampusCardUI (untuk CampusRecommendationCard)
+  // =========================
+  const campusRecommendations: CampusCardUI[] = useMemo(() => {
+    const items = raw?.hasilKampus;
+    if (!Array.isArray(items)) return [];
+
+    return items.map((it, idx) => {
+      const kampus = it.kampus;
+
+      return {
+        id: kampus?.kampus_id ?? it.kampus_id ?? it.id,
+        name: kampus?.nama_kampus ?? "Kampus",
+        // kalau backend kamu belum ada gambar, pakai placeholder
+        imageUrl: "https://picsum.photos/600/600?random=" + (idx + 1),
+        tag: "Rekomendasi",
+      };
+    });
+  }, [raw]);
+
+  // =========================
+  // UI states
+  // =========================
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Memuat hasil...
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-4 sm:p-8 relative">
+      <img src={vector} className="absolute top-0 right-0" alt="vector" />
+
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+          {error}
+        </div>
+      )}
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* LEFT */}
+        <div className="lg:w-2/3 flex flex-col gap-8">
+          <TestResultCard facultyName={facultyName} description={description} />
+
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Rekomendasi Jurusan */}
+            <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow border">
+              <h3 className="text-xl font-semibold mb-4">Rekomendasi Jurusan</h3>
+
+              {safeMajors.length === 0 ? (
+                <div className="text-sm text-gray-500">
+                  Belum ada rekomendasi jurusan.
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {safeMajors.map((m) => (
+                    <MajorRecommendationCard key={m.id} major={m} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Diagram Bidang */}
+            <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow border">
+              <h3 className="text-xl text-center mb-2">Diagram Bidang</h3>
+
+              <RadarBidangChart fieldResults={fieldResults} />
+            </div>
+          </div>
+
+          {/* Rekomendasi Kampus */}
+          <div className="p-6 bg-white rounded-xl shadow border">
+            <h3 className="text-xl font-semibold mb-4">Rekomendasi Kampus</h3>
+
+            {campusRecommendations.length === 0 ? (
+              <div className="text-sm text-gray-500">
+                Belum ada rekomendasi kampus.
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-4">
+                {campusRecommendations.map((c) => (
+                  <CampusRecommendationCard key={c.id} campus={c} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="lg:w-1/3">
+          <button
+            onClick={() => navigate("/category-test")}
+            className="w-full border-2 border-[#00897b] text-[#00897b] py-4 rounded-lg mb-4 flex items-center justify-center gap-2"
+            type="button"
+          >
+            <img src={loadingImg} className="h-5 w-5" alt="ulang" />
+            Ulang Tes
+          </button>
+
+          <button
+            onClick={() => console.log("Download PDF")}
+            className="w-full bg-[#00897b] text-white py-4 rounded-lg flex items-center justify-center gap-2"
+            type="button"
+          >
+            <img src={downloadImg} className="h-5 w-5" alt="download" />
+            Unduh Hasil
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HasilAkhir;
