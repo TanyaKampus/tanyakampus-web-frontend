@@ -5,6 +5,8 @@ import Konsultasi from "./pages/Konsultasi";
 import Tentang from "./pages/About";
 import DetailJurusan from "./pages/TanyaJurusan/DetailJurusan";
 import { Toast } from "./components/Toast";
+import Test from "./pages/CategoryTest/Test";
+import HasilAkhir from "./pages/HasilAkhir";
 
 const Layout = lazy(() => import("./components/Layout"));
 const HomePage = lazy(() => import("./pages/Home"));
@@ -50,7 +52,11 @@ function App() {
             <Route path="category-test">
               <Route index element={<CategoryTest />} />
               <Route path="cek-arus-minat" element={<CekarusMinat />} />
+              <Route path=":quiz_id/test/:riwayat_id" element={<Test />} />
+              <Route path=":quiz_id/result/:riwayat_id" element={<HasilAkhir />} />
+
             </Route>
+
 
             <Route path="konsultasi" element={<Konsultasi />} />
 
