@@ -1,27 +1,34 @@
-interface FilterSectionProps {
+type Option = { label: string; value: string };
+
+type Props = {
   title: string;
-  options: string[];
+  options: readonly Option[]; // ✅ ubah jadi readonly
   selected: string;
   onChange: (value: string) => void;
-}
+};
 
-const FilterSection = ({ title, options, selected, onChange }: FilterSectionProps) => (
-  <div className="mb-6">
-    <h3 className="font-medium text-neutral-800 mb-3 text-base">{title}</h3>
-    <div className="flex flex-wrap gap-6">
-      {options.map((option) => (
-        <label key={option} className="flex items-center cursor-pointer group">
-          <input
-            type="checkbox"
-            checked={selected === option}
-            onChange={() => onChange(option)}
-            className="w-5 h-5 rounded-full border-2 border-neutral text-primary-200 focus:ring-2 focus:ring-primary-200 cursor-pointer appearance-none checked:bg-primary-200 checked:border-primary-200"
-          />
-          <span className="ml-2 text-neutral group-hover:text-neutral-900">{option}</span>
-        </label>
-      ))}
+export default function FilterSection({
+  title,
+  options,
+  selected,
+  onChange,
+}: Props) {
+  return (
+    <div className="mb-6">
+      <p className="font-semibold mb-3">{title}</p>
+
+      <div className="flex flex-wrap gap-4">
+        {options.map((opt) => (
+          <label key={opt.value} className="flex items-center gap-2">
+            <input
+              type="radio"
+              checked={selected === opt.value}
+              onChange={() => onChange(opt.value)}
+            />
+            <span>{opt.label}</span>
+          </label>
+        ))}
+      </div>
     </div>
-  </div>
-);
-
-export default FilterSection;
+  );
+}

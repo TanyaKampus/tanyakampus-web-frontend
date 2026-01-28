@@ -198,7 +198,7 @@ const Test = () => {
         {!!error && <div className="text-red-600 text-center mb-4">{error}</div>}
 
         <div className="text-sm text-gray-400 mb-4">
-          Mode: <span className="font-semibold">{phase}</span>
+          Tipe Pertanyaan: <span className="font-semibold">{phase}</span>
         </div>
 
         <ProgressBar trigger={trigger} total={Math.max(total, 1)} />

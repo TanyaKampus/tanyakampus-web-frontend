@@ -32,6 +32,7 @@ const ProfileRiwayatTes = () => {
         setError("");
 
         const res = await getMyQuizHistoryService();
+        console.log("data: ", res.data)
 
         if (!res?.success) {
           setError(res?.message || "Gagal mengambil riwayat tes.");
@@ -72,7 +73,7 @@ const ProfileRiwayatTes = () => {
         date,
         majors,
         waitingCount: 0,
-        quiz_id: it.quiz_id
+        quiz_id: it.quiz.quiz_id
       };
     });
   }, [items]);

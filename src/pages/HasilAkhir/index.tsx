@@ -94,6 +94,7 @@ const HasilAkhir: React.FC = () => {
         ? {
             bidang_id: r.bidang.bidang_id,
             nama_bidang: r.bidang.nama_bidang,
+            foto_bidang: (r.bidang as any).foto_bidang ?? null,
             deskripsi: r.bidang.deskripsi ?? null,
           }
         : null,
@@ -117,6 +118,10 @@ const HasilAkhir: React.FC = () => {
       winnerBidang?.nama_bidang ||
       "Hasil Tes"
     );
+  }, [winnerBidang]);
+
+  const facultyImageUrl = useMemo(() => {
+    return winnerBidang?.bidang?.foto_bidang ?? null;
   }, [winnerBidang]);
 
   const description = useMemo(() => {
@@ -171,11 +176,15 @@ const HasilAkhir: React.FC = () => {
     return items.map((it, idx) => {
       const kampus = it.kampus;
 
+      const imageUrl =
+        (kampus as any)?.foto_kampus ||
+        (kampus as any)?.logo_kampus || // fallback kalau foto belum ada
+        `https://picsum.photos/600/600?random=${idx + 1}`;
+
       return {
         id: kampus?.kampus_id ?? it.kampus_id ?? it.id,
         name: kampus?.nama_kampus ?? "Kampus",
-        // kalau backend kamu belum ada gambar, pakai placeholder
-        imageUrl: "https://picsum.photos/600/600?random=" + (idx + 1),
+        imageUrl,
         tag: "Rekomendasi",
       };
     });
@@ -209,7 +218,11 @@ const HasilAkhir: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* LEFT */}
         <div className="lg:w-2/3 flex flex-col gap-8">
-          <TestResultCard facultyName={facultyName} description={description} />
+          <TestResultCard
+            facultyName={facultyName}
+            description={description}
+            imageUrl={facultyImageUrl}
+          />
 
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Rekomendasi Jurusan */}
@@ -223,7 +236,7 @@ const HasilAkhir: React.FC = () => {
                   Belum ada rekomendasi jurusan.
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   {safeMajors.map((m) => (
                     <MajorRecommendationCard key={m.id} major={m} />
                   ))}
@@ -233,7 +246,9 @@ const HasilAkhir: React.FC = () => {
 
             {/* Diagram Bidang */}
             <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow border">
-              <h3 className="text-xl text-center mb-2">Diagram Bidang</h3>
+              <h3 className="text-xl text-center mb-2 font-semibold">
+                Diagram Bidang
+              </h3>
 
               <RadarBidangChart fieldResults={fieldResults} />
             </div>
