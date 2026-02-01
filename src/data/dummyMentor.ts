@@ -9,42 +9,42 @@ import Thanos from '@/assets/images/Thanos.png';
 export const mentors: MentorsCardProps[] = [
   {
     imageUrl: Wolverine,
-    logoCampussUrl: UnikomLogo,
+    logo_kampus: UnikomLogo,
     name: "James Howlett",
     originCampuss: "Universitas Komputer Indonesia",
     major: "Teknik dan Ilmu Komputer"
   },
   {
     imageUrl: Deadpool,
-    logoCampussUrl: ITBLogo,
+    logo_kampus: ITBLogo,
     name: "Wade Wilson",
     originCampuss: "Institut Teknologi Bandung",
     major: "Bisnis dan Ekonomi"
   },
   {
     imageUrl: Thanos,
-    logoCampussUrl: UnpadLogo,
+    logo_kampus: UnpadLogo,
     name: "Thanos",
     originCampuss: "Universitas Padjajaran",
     major: "Ilmu dan Sosial Politik"
   },
   {
     imageUrl: Wolverine,
-    logoCampussUrl: UnikomLogo,
+    logo_kampus: UnikomLogo,
     name: "James Howlett",
     originCampuss: "Universitas Komputer Indonesia",
     major: "Teknik dan Ilmu Komputer"
   },
   {
     imageUrl: Deadpool,
-    logoCampussUrl: ITBLogo,
+    logo_kampus: ITBLogo,
     name: "Wade Wilson",
     originCampuss: "Institut Teknologi Bandung",
     major: "Bisnis dan Ekonomi"
   },
   {
     imageUrl: Thanos,
-    logoCampussUrl: UnpadLogo,
+    logo_kampus: UnpadLogo,
     name: "Thanos",
     originCampuss: "Universitas Padjajaran",
     major: "Ilmu dan Sosial Politik"
