@@ -39,9 +39,18 @@ export const addFavoriteMajorService = async (jurusan_id: string) => {
       withCredentials: true,
     }
   );
+  
 
   return res.data;
 };
+
+export const removeFavoriteMajorService = async (jurusan_id: string) => {
+  const res = await api.delete(`/api/favorite/major/${jurusan_id}`, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 
 export const getFavoriteMajorService = async () => {
   const res = await api.get("/api/favorite/major", {

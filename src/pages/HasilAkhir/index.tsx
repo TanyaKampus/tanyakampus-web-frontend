@@ -205,7 +205,7 @@ const HasilAkhir: React.FC = () => {
     <div className="container mx-auto p-4 sm:p-8 relative">
       <img
         src={vector}
-        className="absolute top-0 right-0 pointer-events-none select-none"
+        className="absolute -z-50 top-0 right-0 pointer-events-none select-none"
         alt="vector"
       />
 
@@ -226,7 +226,7 @@ const HasilAkhir: React.FC = () => {
 
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Rekomendasi Jurusan */}
-            <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow border">
+            <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow">
               <h3 className="text-xl font-semibold mb-4">
                 Rekomendasi Jurusan
               </h3>
@@ -245,7 +245,7 @@ const HasilAkhir: React.FC = () => {
             </div>
 
             {/* Diagram Bidang */}
-            <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow border">
+            <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow">
               <h3 className="text-xl text-center mb-2 font-semibold">
                 Diagram Bidang
               </h3>
@@ -255,7 +255,7 @@ const HasilAkhir: React.FC = () => {
           </div>
 
           {/* Rekomendasi Kampus */}
-          <div className="p-6 bg-white rounded-xl shadow border">
+          <div className="p-6 bg-white rounded-xl shadow">
             <h3 className="text-xl font-semibold mb-4">Rekomendasi Kampus</h3>
 
             {campusRecommendations.length === 0 ? (

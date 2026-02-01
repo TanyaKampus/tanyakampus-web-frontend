@@ -5,7 +5,10 @@ export interface MentorsCardProps {
   name: string;
   originCampuss: string;
   major: string;
-  logoCampussUrl: string;
+
+  // ✅ pakai nama field dari backend
+  logo_kampus: string;
+
   className?: string;
 }
 
@@ -14,18 +17,14 @@ const MentorsCard: React.FC<MentorsCardProps> = ({
   name,
   originCampuss,
   major,
-  logoCampussUrl,
+  logo_kampus,
   className = "",
 }) => {
   return (
     <div
       className={`relative ${className} w-full h-[150px] rounded-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02]`}
     >
-      <img
-        src={imageUrl}
-        alt={name}
-        className="m-auto"
-      />
+      <img src={imageUrl} alt={name} className="m-auto" />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
@@ -34,9 +33,9 @@ const MentorsCard: React.FC<MentorsCardProps> = ({
       </div>
 
       <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 z-10">
-        <div className="w-12 h-12 rounded-full flex items-center justify-center p-1">
+        <div className="w-12 h-12 rounded-full flex items-center justify-center p-1 bg-white/90">
           <img
-            src={logoCampussUrl}
+            src={logo_kampus}
             alt={`${originCampuss} logo`}
             className="w-full h-full object-contain"
           />
@@ -46,9 +45,7 @@ const MentorsCard: React.FC<MentorsCardProps> = ({
           <h3 className="text-white font-semibold text-lg leading-tight">
             {name}
           </h3>
-          <p className="text-white">
-            {originCampuss}
-          </p>
+          <p className="text-white">{originCampuss}</p>
         </div>
       </div>
     </div>

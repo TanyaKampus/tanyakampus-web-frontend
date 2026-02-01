@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
 import { addFavoriteCampusService } from "@/services/favorite.service";
 import { toastError, toastSuccess } from "@/components/Toast";
+import axios from "axios";
 
 type Props = {
   kampus: {
@@ -17,8 +18,13 @@ type Props = {
 };
 
 const HeroDetail: React.FC<Props> = ({ kampus }) => {
-  const images: string[] = kampus.foto_kampus ? [kampus.foto_kampus] : [];
   const autoplayDelay = 5000;
+
+  // ✅ stabil (tidak bikin array baru tiap render)
+  const images = useMemo<string[]>(
+    () => (kampus.foto_kampus ? [kampus.foto_kampus] : []),
+    [kampus.foto_kampus]
+  );
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -32,6 +38,11 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
     }, autoplayDelay);
 
     return () => clearInterval(interval);
+  }, [images.length, autoplayDelay]);
+
+  // ✅ kalau images berubah dan index out of range
+  useEffect(() => {
+    setActiveIndex((idx) => Math.min(idx, Math.max(0, images.length - 1)));
   }, [images.length]);
 
   const handleDotClick = (index: number) => {
@@ -45,11 +56,34 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
       setLoadingLike(true);
 
       await addFavoriteCampusService(kampus.kampus_id);
-      toastSuccess("Berhasil Menambahkan Kampus ke Favorit!")
-
+      toastSuccess("Berhasil Menambahkan Kampus ke Favorit!");
       setLiked(true);
-    } catch (err: any) {
-      toastError("Gagal menambahkan ke favorit. Silakan login.");
+    } catch (err: unknown) {
+      // ✅ no-any
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const msg =
+          (err.response?.data as { message?: string } | undefined)?.message ??
+          err.message;
+
+        // contoh: unauthorized
+        if (status === 401) {
+          toastError("Gagal menambahkan ke favorit. Silakan login.");
+          return;
+        }
+
+        // contoh: sudah ada di favorit (biasanya 409)
+        if (status === 409) {
+          toastError("Kampus sudah ada dalam Favorite");
+          setLiked(true);
+          return;
+        }
+
+        toastError(msg || "Gagal menambahkan favorit");
+        return;
+      }
+
+      toastError("Terjadi kesalahan. Coba lagi.");
     } finally {
       setLoadingLike(false);
     }
@@ -78,7 +112,7 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
                 alt={`Logo ${kampus.nama_kampus}`}
                 className="w-full h-full object-contain p-4"
                 onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = "none";
+                  e.currentTarget.style.display = "none";
                 }}
               />
             ) : (
@@ -90,12 +124,13 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
           <button
             onClick={handleLike}
             disabled={loadingLike}
+            aria-label="Tambah kampus ke favorit"
             className="absolute top-0 right-0 transition duration-200 translate-y-10"
           >
             <div
               className={`w-9 h-9 transition-all duration-200 ${
                 liked ? "opacity-100 scale-110" : "opacity-60 scale-100"
-              }`}
+              } ${loadingLike ? "opacity-40" : ""}`}
             >
               <img
                 src={liked ? Likeactive : Like}
@@ -133,7 +168,7 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
             <div className="relative w-full h-full flex justify-center items-center">
               {images.map((imgSrc, index) => (
                 <img
-                  key={index}
+                  key={imgSrc + index}
                   src={imgSrc}
                   alt={`Gambar kampus ${index + 1}`}
                   className={`absolute transition-opacity duration-1000 ease-in-out 
@@ -148,6 +183,7 @@ const HeroDetail: React.FC<Props> = ({ kampus }) => {
                     <button
                       key={index}
                       onClick={() => handleDotClick(index)}
+                      aria-label={`Slide ${index + 1}`}
                       className={`w-3 h-3 rounded-full transition-colors duration-300 ${
                         index === activeIndex
                           ? "bg-teal-500"

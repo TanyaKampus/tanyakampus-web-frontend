@@ -4,6 +4,7 @@ import Like from "@/assets/images/love.png";
 import Likeactive from "@/assets/images/loveactive.png";
 import { addFavoriteMajorService } from "@/services/favorite.service";
 import { toastError, toastSuccess } from "@/components/Toast";
+import axios from "axios";
 
 type Props = {
   jurusan: {
@@ -19,7 +20,6 @@ type Props = {
   };
 };
 
-
 const HeroDetailJurusan: React.FC<Props> = ({ jurusan }) => {
   const [liked, setLiked] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
@@ -31,9 +31,28 @@ const HeroDetailJurusan: React.FC<Props> = ({ jurusan }) => {
       setLoadingLike(true);
       await addFavoriteMajorService(jurusan.jurusan_id);
       setLiked(true);
-      toastSuccess("Berhasil Menambahkan Jurusan ke Favorit!")
-    } catch (err: any) {
-      toastError("Gagal menambahkan jurusan ke favorit");
+      toastSuccess("Berhasil Menambahkan Jurusan ke Favorit!");
+    } catch (err: unknown) {
+      // ✅ no-any: aman & rapi
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const msg =
+          (err.response?.data as { message?: string } | undefined)?.message ??
+          err.message;
+
+        // contoh: favorit sudah ada biasanya 409 / 400 (tergantung backend)
+        if (status === 409) {
+          toastError("Jurusan sudah ada dalam Favorite");
+          return;
+        }
+
+        // fallback message dari backend/axios
+        toastError(msg || "Gagal menambahkan favorit");
+        return;
+      }
+
+      // non-axios error
+      toastError("Terjadi kesalahan. Coba lagi.");
     } finally {
       setLoadingLike(false);
     }
@@ -65,11 +84,12 @@ const HeroDetailJurusan: React.FC<Props> = ({ jurusan }) => {
           onClick={handleLike}
           disabled={loadingLike}
           className="absolute top-16 right-0"
+          aria-label="Tambah ke favorit"
         >
           <div
             className={`w-9 h-9 transition-all ${
               liked ? "scale-110 opacity-100" : "opacity-60"
-            }`}
+            } ${loadingLike ? "opacity-40" : ""}`}
           >
             <img
               src={liked ? Likeactive : Like}
@@ -87,9 +107,11 @@ const HeroDetailJurusan: React.FC<Props> = ({ jurusan }) => {
             {jurusan.bidang.nama_bidang}
           </span>
 
-          {jurusan.deskripsi && (
+          {/* ✅ tampilkan deskripsi jurusan kalau ada,
+              fallback ke deskripsi bidang kalau jurusan kosong */}
+          {(jurusan.deskripsi || jurusan.bidang.deskripsi) && (
             <p className="mt-4 text-gray-700 max-w-2xl leading-relaxed">
-              {jurusan.bidang.deskripsi}
+              {jurusan.deskripsi ?? jurusan.bidang.deskripsi}
             </p>
           )}
         </div>
