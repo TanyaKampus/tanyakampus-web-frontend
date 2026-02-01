@@ -1,10 +1,19 @@
 // src/pages/Tentang/components/MemberCard.tsx
 import React from "react";
 import { AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
-import type { MentorCard } from "@/services/mentor.service";
+
+export type Member = {
+  id: string;
+  image: string;
+  name: string;
+  role: string;
+  quote?: string;
+  instagram?: string;
+  linkedin?: string;
+};
 
 interface MemberCardProps {
-  member: MentorCard;
+  member: Member;
 }
 
 const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
@@ -21,14 +30,10 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
           {member.name}
         </span>
 
-        <p className="text-sm font-semibold text-tertiary-500">
-          {member.role}
-        </p>
+        <p className="text-sm font-semibold text-tertiary-500">{member.role}</p>
 
         {member.quote && (
-          <p className="text-sm text-neutral leading-relaxed">
-            “{member.quote}”
-          </p>
+          <p className="text-sm text-neutral leading-relaxed">“{member.quote}”</p>
         )}
 
         <div className="flex gap-2 pt-2 text-teal-600 text-2xl">

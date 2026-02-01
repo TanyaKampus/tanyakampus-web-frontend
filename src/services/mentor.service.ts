@@ -1,49 +1,52 @@
 // src/services/mentor.service.ts
 import api from "./api";
 
-/** ===== DTO dari backend ===== */
 export type MentorDTO = {
-  mentor_id: string;
+  mentor_id?: string; // optional biar aman
   nama_mentor: string;
   pendidikan: string;
   keahlian: string;
   foto_mentor?: string | null;
+  logo_kampus?: string | null;
+
+  // beberapa backend kadang pakai id lain
+  id?: string;
+  _id?: string;
+
   createdAt?: string;
   updatedAt?: string;
 };
 
 export type GetAllMentorResponse = {
-  success: boolean;
-  message: string;
-  data: MentorDTO[];
+  success?: boolean;
+  message?: string;
+  data?: MentorDTO[]; // optional biar tidak maksa
   total?: number;
 };
 
 export type GetMentorByIdResponse = {
-  success: boolean;
-  message: string;
-  data: MentorDTO;
+  success?: boolean;
+  message?: string;
+  data?: MentorDTO;
 };
 
-/** ===== Format yang dipakai UI MemberCard ===== */
-export type MentorCard = {
+/** ===== Format yang dipakai UI MentorsCard (Konsultasi) ===== */
+export type MentorsCardItem = {
   id: string;
-  image: string;
+  imageUrl: string;
   name: string;
-  role: string;
-  quote?: string;
-  instagram?: string;
-  linkedin?: string;
-  whatsapp?: string;
+  originCampuss: string;
+  major: string;
+  logo_kampus: string;
 };
 
-/** fallback image */
 const FALLBACK_IMAGE = "/images/placeholder-mentor.jpg";
+const FALLBACK_CAMPUS_LOGO = "/images/placeholder-campus-logo.png";
 
-/** kalau foto_mentor berupa path relatif, jadikan absolute */
-const normalizeImage = (src?: string | null) => {
+/** normalize url umum */
+const normalizeUrl = (src?: string | null, fallback?: string) => {
   const val = (src || "").trim();
-  if (!val) return FALLBACK_IMAGE;
+  if (!val) return fallback || "";
 
   if (val.startsWith("http://") || val.startsWith("https://")) return val;
 
@@ -53,27 +56,71 @@ const normalizeImage = (src?: string | null) => {
   return val.startsWith("/") ? `${base}${val}` : `${base}/${val}`;
 };
 
-const toMentorCard = (m: MentorDTO): MentorCard => ({
-  id: m.mentor_id,
+/** =========================
+ * ✅ Helpers: type guards (tanpa any)
+ * ========================= */
+const isRecord = (v: unknown): v is Record<string, unknown> =>
+  typeof v === "object" && v !== null;
+
+const hasString = (obj: Record<string, unknown>, key: string): obj is Record<string, unknown> & Record<string, string> =>
+  typeof obj[key] === "string" && (obj[key] as string).trim().length > 0;
+
+const isMentorDTO = (v: unknown): v is MentorDTO => {
+  if (!isRecord(v)) return false;
+  return (
+    hasString(v, "nama_mentor") &&
+    hasString(v, "pendidikan") &&
+    hasString(v, "keahlian")
+  );
+};
+
+const isMentorDTOArray = (v: unknown): v is MentorDTO[] => {
+  return Array.isArray(v) && v.every(isMentorDTO);
+};
+
+/** ✅ ambil array mentor dari berbagai bentuk response (tanpa any) */
+const extractMentorList = (payload: unknown): MentorDTO[] => {
+  // case 1: backend langsung array mentor
+  if (isMentorDTOArray(payload)) return payload;
+
+  // case 2: { success, message, data: [...] }
+  if (isRecord(payload) && isMentorDTOArray(payload.data)) return payload.data;
+
+  // case 3: backend balikin single object mentor (tanpa wrapper)
+  if (isMentorDTO(payload)) return [payload];
+
+  // case 4: { data: { ...mentor } }
+  if (isRecord(payload) && isMentorDTO(payload.data)) return [payload.data];
+
+  return [];
+};
+
+const buildMentorId = (m: MentorDTO) => {
+  return (
+    m.mentor_id ||
+    m.id ||
+    m._id ||
+    `${m.nama_mentor}-${m.pendidikan}-${m.keahlian}` // fallback deterministic
+  );
+};
+
+/** ✅ mapper untuk MentorsCard (Konsultasi) */
+const toMentorsCardItem = (m: MentorDTO): MentorsCardItem => ({
+  id: buildMentorId(m),
+  imageUrl: normalizeUrl(m.foto_mentor, FALLBACK_IMAGE),
   name: m.nama_mentor,
-  role: m.keahlian,         // tampil di UI sebagai role
-  quote: m.pendidikan,      // tampil di UI sebagai quote (opsional)
-  image: normalizeImage(m.foto_mentor),
+  originCampuss: m.pendidikan,
+  major: m.keahlian,
+  logo_kampus: normalizeUrl(m.logo_kampus, FALLBACK_CAMPUS_LOGO),
 });
 
 /** ===== services ===== */
-export const getAllMentorService = async (): Promise<GetAllMentorResponse> => {
-  const res = await api.get<GetAllMentorResponse>("/api/mentor");
-  return res.data;
-};
+export const getAllMentorsCardService = async (): Promise<MentorsCardItem[]> => {
+  const res = await api.get("/api/mentor");
 
-export const getAllMentorCardService = async (): Promise<MentorCard[]> => {
-  const res = await api.get<GetAllMentorResponse>("/api/mentor");
-  const items = res.data?.data;
-  return Array.isArray(items) ? items.map(toMentorCard) : [];
-};
+  // ini penting untuk debug cepat
+  console.log("RAW mentor response:", res.data);
 
-export const getMentorByIdService = async (id: string): Promise<GetMentorByIdResponse> => {
-  const res = await api.get<GetMentorByIdResponse>(`/api/mentor/${id}`);
-  return res.data;
+  const list = extractMentorList(res.data);
+  return list.map(toMentorsCardItem);
 };
