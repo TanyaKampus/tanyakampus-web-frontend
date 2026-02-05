@@ -34,7 +34,6 @@ const toParagraphs = (text?: string | null) => {
 const HasilAkhir: React.FC = () => {
   const navigate = useNavigate();
   const { riwayat_id = "" } = useParams<{ riwayat_id: string }>();
-
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -302,7 +301,7 @@ const HasilAkhir: React.FC = () => {
                     campuses={campusRecommendations}
                   />
                 }
-                fileName={`hasil-tes-${riwayat_id}.pdf`}
+                fileName={`Hasil Test-${riwayat_id}.pdf`}
               >
                 {({ loading: pdfLoading }) => (
                   <button

@@ -108,3 +108,10 @@ export const abandonQuizService = async (
   const res = await api.put(`/api/v2/quiz/history/${riwayat_id}/abandon`);
   return res.data;
 };
+
+export const getQuizHistoryDetailService = async (
+  riwayat_id: string,
+): Promise<GetResultBackendResponse> => {
+  const res = await api.get(`/api/v2/quiz/history/${riwayat_id}`);
+  return res.data;
+};

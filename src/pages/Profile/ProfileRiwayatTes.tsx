@@ -3,8 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import RiwayatTesCard from "@/components/RiwayatTesCard";
-import { getMyQuizHistoryService } from "@/services/quiz.service";
+import {
+  getMyQuizHistoryService,
+  getResultService,
+} from "@/services/quiz.service";
 import type { QuizHistoryMeItemDTO } from "@/utils/interface";
+import HiddenPDFDownloader from "./components/HiddenDownloadPDF";
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return "-";
@@ -24,6 +28,27 @@ const ProfileRiwayatTes = () => {
   const [items, setItems] = useState<QuizHistoryMeItemDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [downloadData, setDownloadData] = useState<any>(null);
+  const [, setDownloading] = useState(false);
+
+  const handleDownload = async (riwayat_id: string) => {
+    try {
+      setDownloading(true);
+
+      const res = await getResultService(riwayat_id);
+      if (!res?.success) {
+        alert("Gagal mengambil hasil tes");
+        return;
+      }
+
+      setDownloadData(res.data);
+    } catch (e) {
+      console.error(e);
+      alert("Terjadi kesalahan");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -32,7 +57,7 @@ const ProfileRiwayatTes = () => {
         setError("");
 
         const res = await getMyQuizHistoryService();
-        console.log("data: ", res.data)
+        console.log("data: ", res.data);
 
         if (!res?.success) {
           setError(res?.message || "Gagal mengambil riwayat tes.");
@@ -42,7 +67,9 @@ const ProfileRiwayatTes = () => {
 
         setItems(Array.isArray(res.data) ? res.data : []);
       } catch (e: any) {
-        setError(e?.response?.data?.message || e?.message || "Terjadi kesalahan.");
+        setError(
+          e?.response?.data?.message || e?.message || "Terjadi kesalahan.",
+        );
         setItems([]);
       } finally {
         setLoading(false);
@@ -60,11 +87,15 @@ const ProfileRiwayatTes = () => {
         it.status_quiz === "COMPLETED"
           ? [
               it.quiz?.nama_quiz ?? "Quiz",
-              it.bidang_terpilih ? "Bidang terpilih tersedia" : "Bidang terpilih belum tersedia",
+              it.bidang_terpilih
+                ? "Bidang terpilih tersedia"
+                : "Bidang terpilih belum tersedia",
             ]
           : [
               it.quiz?.nama_quiz ?? "Quiz",
-              it.status_quiz === "IN_PROGRESS" ? "Sedang dikerjakan" : "Dibatalkan",
+              it.status_quiz === "IN_PROGRESS"
+                ? "Sedang dikerjakan"
+                : "Dibatalkan",
             ];
 
       return {
@@ -73,7 +104,7 @@ const ProfileRiwayatTes = () => {
         date,
         majors,
         waitingCount: 0,
-        quiz_id: it.quiz.quiz_id
+        quiz_id: it.quiz.quiz_id,
       };
     });
   }, [items]);
@@ -82,7 +113,8 @@ const ProfileRiwayatTes = () => {
     <div>
       <h1 className="text-3xl text-neutral font-bold">Riwayat Tes</h1>
       <p className="mt-2 text-[#BDBDBD] text-lg">
-        Simpan hasil tes untuk perbandingan akurat dan analisis perkembangan tesmu
+        Simpan hasil tes untuk perbandingan akurat dan analisis perkembangan
+        tesmu
       </p>
 
       <div className="my-6 bg-[#D9D9D9] w-full h-0.5"></div>
@@ -106,11 +138,21 @@ const ProfileRiwayatTes = () => {
               majors={item.majors}
               waitingCount={item.waitingCount}
               status={item.status}
-              onView={() => navigate(`/${item.quiz_id}/result/${item.riwayat_id}`)}
-              onDownload={() => console.log("download:", item.riwayat_id)}
+              onView={() =>
+                navigate(
+                  `/category-test/${item.quiz_id}/result/${item.riwayat_id}`,
+                )
+              }
+              onDownload={() => handleDownload(item.riwayat_id)}
             />
           ))}
         </div>
+      )}
+      {downloadData && (
+        <HiddenPDFDownloader
+          data={downloadData}
+          onDone={() => setDownloadData(null)}
+        />
       )}
     </div>
   );
