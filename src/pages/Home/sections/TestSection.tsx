@@ -1,57 +1,123 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Button from "@/components/Button";
+import {
+  getActiveQuizService,
+  startQuizService,
+} from "@/services/quiz.service";
+
 import ArusMinat from "@/assets/images/ArusMinat.png";
 import SelamDalam from "@/assets/images/SelamDalam.png";
 import Vector from "@/assets/images/TestVector.png";
 import Penyelam from "@/assets/images/Penyelam.png";
 
-const cards = [
-  {
-    id: 1,
-    img: ArusMinat,
-    title: "Tes Arus Minat",
-    desc: "Tes cepat ini dirancang untuk memetakan arah minat dan potensi awalmu secara umum. Gratis, hasilnya langsung keluar, dan siap jadi bekal pertamamu!",
-    label: "Gratis",
-    labelColor: "bg-[#A81B1B]",
-  },
-  {
-    id: 2,
-    img: SelamDalam,
-    title: "Paket Selam Mendalam",
-    desc: "Ini adalah ekspedisi menyeluruh untuk menemukan harta karun potensimu. Dapatkan laporan psikometri lengkap, peta jurusan paling akurat, dan analisis mendalam tentang kekuatan personalitas, preferensi belajar, dan strategi karir jangka panjang.",
-    label: "Best Value!",
-    labelColor: "bg-[#CBB74E]",
-  },
-];
+type ActiveQuiz = {
+  quiz_id: string;
+  nama_quiz: string;
+  deskripsi_quiz: string;
+  riwayat_id: string;
+};
 
 const TestSection = () => {
-  const navigate = useNavigate(); // hook navigate
+  const navigate = useNavigate();
+
+  /** UI state */
   const [activeIndex, setActiveIndex] = useState(0);
   const [fade, setFade] = useState(true);
 
+  /** BE integration state */
+  const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
+  const [loadingQuiz, setLoadingQuiz] = useState(false);
+
+  /** auto slider */
   useEffect(() => {
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
-        setActiveIndex((prev) => (prev === cards.length - 1 ? 0 : prev + 1));
+        setActiveIndex((prev) => (prev === 1 ? 0 : prev + 1));
         setFade(true);
       }, 400);
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
+  /** fetch active quiz */
+  useEffect(() => {
+    const fetchActiveQuiz = async () => {
+      try {
+        setLoadingQuiz(true);
+        const res = await getActiveQuizService();
+
+        if (res.success && res.data?.quiz_id) {
+          setActiveQuiz(res.data);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil quiz aktif:", err);
+      } finally {
+        setLoadingQuiz(false);
+      }
+    };
+
+    fetchActiveQuiz();
+  }, []);
+
+  /** handlers */
   const handleLihatTes = () => {
-    navigate("/category-test"); // tombol "Lihat Tes Lainnya"
+    navigate("/category-test");
   };
 
-  const handleMulaiCekOmbak = () => {
-    navigate("/category-test/cek-arus-minat"); // tombol "Mulai Cek Ombak"
+  const handleMulaiCekOmbak = async () => {
+    if (!activeQuiz?.quiz_id) return;
+
+    try {
+      setLoadingQuiz(true);
+
+      const res = await startQuizService(activeQuiz.quiz_id);
+
+      if (!res.success || !res.data?.riwayat_id) {
+        alert("Gagal memulai quiz");
+        return;
+      }
+
+      navigate(
+        `/category-test/${activeQuiz.quiz_id}/test/${activeQuiz.riwayat_id}`,
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat memulai quiz");
+    } finally {
+      setLoadingQuiz(false);
+    }
   };
+
+  /** cards (1 dynamic dari BE, 1 static upsell) */
+  const cards = [
+    {
+      id: 1,
+      img: ArusMinat,
+      title: activeQuiz?.nama_quiz ?? "Tes Arus Minat",
+      desc:
+        activeQuiz?.deskripsi_quiz ??
+        "Tes cepat untuk memetakan arah minat dan potensi awalmu.",
+      label: "Gratis",
+      labelColor: "bg-[#A81B1B]",
+    },
+    {
+      id: 2,
+      img: SelamDalam,
+      title: "Paket Selam Mendalam",
+      desc:
+        "Ekspedisi menyeluruh untuk menemukan potensi terbaikmu dengan laporan psikometri lengkap.",
+      label: "Best Value!",
+      labelColor: "bg-[#CBB74E]",
+    },
+  ];
 
   return (
     <section className="relative flex flex-col md:flex-row items-center justify-between gap-10 py-28 px-10 md:px-26 overflow-hidden">
-      {/* Background Vector */}
+      {/* Background */}
       <img
         src={Vector}
         alt="Vector"
@@ -110,10 +176,11 @@ const TestSection = () => {
           </div>
 
           <Button
-            label="Mulai Cek Ombak"
+            label={loadingQuiz ? "Memuat..." : "Mulai Cek Ombak"}
             variant="solid-dark"
             className="w-full mt-4"
-            onClick={handleMulaiCekOmbak} // arah ke CekarusMinat
+            onClick={handleMulaiCekOmbak}
+            disabled={!activeQuiz || loadingQuiz}
           />
         </div>
 
@@ -130,7 +197,9 @@ const TestSection = () => {
                 }, 300);
               }}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                i === activeIndex ? "bg-primary-300 scale-125" : "bg-[#D9D9D9]"
+                i === activeIndex
+                  ? "bg-primary-300 scale-125"
+                  : "bg-[#D9D9D9]"
               }`}
             />
           ))}

@@ -52,11 +52,6 @@ const ProfileForm = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setForm({ ...form, foto_profil: file });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -157,15 +152,6 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
-          <label className="text-sm text-[#BDBDBD]">Foto Profil</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            className="w-full mt-1 border-[#D7D7D7] border-2 px-3 py-2 rounded-lg"
-          />
-        </div>
         <Button
           type="submit"
           disabled={saving}

@@ -83,6 +83,7 @@ export type ActiveQuizDTO = {
   is_active: boolean;
   createdAt: string;
   updatedAt: string;
+  riwayat_id: string;
 };
 
 export type GetActiveQuizResponse = {
@@ -230,6 +231,14 @@ export type QuizHistoryMeItemDTO = {
     nama_quiz: string;
   };
   bidang_terpilih: string | null;
+  hasilKampus?: {
+    id: string;
+    kampus_id: string;
+    kampus: {
+      kampus_id: string;
+      nama_kampus: string;
+    };
+  }[];
 };
 
 export type GetMyQuizHistoryResponseDTO = {
