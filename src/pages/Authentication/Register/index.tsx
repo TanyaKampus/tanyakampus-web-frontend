@@ -15,13 +15,15 @@ const Register = () => {
     sessionStorage.setItem("register_email", email);
     navigate("/identitas");
   };
+
   const handleBackButton = () => {
-    navigate(-1)
-  }
-  
+    navigate(-1);
+  };
+
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="relative flex-1 bg-gradient-to-b from-primary-200 to-primary-100 flex flex-col justify-center items-center overflow-hidden">
+    <div className="flex min-h-screen flex-col md:flex-row overflow-hidden">
+      {/* LEFT – hanya desktop */}
+      <div className="relative hidden md:flex md:flex-1 bg-gradient-to-b from-primary-200 to-primary-100 items-center justify-center overflow-hidden">
         <div className="absolute top-6 left-8 z-10">
           <LogoItem />
         </div>
@@ -29,56 +31,76 @@ const Register = () => {
         <img
           src={Vector}
           alt="Vector"
-          className="absolute top-0 right-0 w-[150px] object-cover"
+          className="absolute top-0 right-0 w-[150px]"
         />
 
         <img
           src={Lulu}
           alt="Lulu"
-          className="max-w-[520px] absolute bottom-[-18%] left-1/2 -translate-x-[60%] object-contain scale-x-[-1] rotate-[8deg]"
+          className="max-w-[480px] absolute bottom-[-18%] left-1/2 -translate-x-[60%] scale-x-[-1] rotate-[8deg]"
         />
       </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center pt-2">
-        <div className="max-w-md w-full -mt-29">
-            <button className="flex items-center gap-3" onClick={handleBackButton}>
-              <img
-                src={ButtonRg}
-                alt="Kembali ke login"
-                className="w-12 h-40 object-contain cursor-pointer"
-              />
-              <h1 className="text-[20px] font-bold text-neutral text-center">
-                Sudah Punya Akun
-              </h1>
-            </button>
-          <h1 className="text-[24px] font-bold text-neutral text-left">
+      {/* RIGHT */}
+      <div className="flex flex-1 flex-col justify-center items-center px-4 py-8 md:px-0">
+        {/* Logo mobile */}
+        <div className="md:hidden mb-6 p-4 bg-primary-300 rounded-full">
+          <LogoItem />
+        </div>
+
+        <div className="w-full max-w-md">
+          <button
+            className="flex items-center gap-3 mb-4"
+            onClick={handleBackButton}
+          >
+            <img
+              src={ButtonRg}
+              alt="Kembali"
+              className="w-10 h-10 object-contain"
+            />
+            <h1 className="text-lg font-bold text-neutral">Sudah Punya Akun</h1>
+          </button>
+
+          <h1 className="text-2xl font-bold text-neutral mb-1">
             Yuk Daftar Dulu!
           </h1>
-          <p className="text-left text-neutral mb-6">
+          <p className="text-neutral mb-6 text-sm md:text-base">
             Biar kamu bisa temukan jurusan dan kampus terbaik sesuai
             kepribadianmu.
           </p>
 
-          <form className="space-y-4">
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleNext();
+            }}
+          >
             <div>
               <label className="block text-sm font-semibold mb-1">Email</label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Masukan Email kamu"
-          className="w-full border border-neutral rounded-xl px-3 py-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+              <input
+                type="email"
+                name="email"
+                placeholder="Masukan Email kamu"
+                className="w-full border border-neutral rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-            <div className="flex items-center gap-2 mt-2 text-sm text-neutral">
+
+            <div className="flex items-center gap-2 text-sm text-neutral">
               <div className="w-4 h-4 flex items-center justify-center rounded-full bg-neutral text-white text-xs font-bold">
                 i
               </div>
               <span>Pastikan email kamu sudah benar</span>
             </div>
 
-              <Button label="Lanjut" variant="solid-dark" className="w-full" onClick={handleNext}/>
+            <Button
+              type="submit"
+              label="Lanjut"
+              variant="solid-dark"
+              className="w-full"
+            />
 
             <div className="flex items-center my-4">
               <div className="flex-1 h-px bg-neutral" />
@@ -88,7 +110,7 @@ const Register = () => {
 
             <button
               type="button"
-              className="w-full flex items-center justify-center gap-2 bg-[#BE0B0B] cursor-pointer text-white font-medium py-2 rounded-md hover:bg-[#C23321] transition"
+              className="w-full flex items-center justify-center gap-2 bg-[#BE0B0B] text-white py-2 rounded-md hover:bg-[#C23321]"
             >
               <img
                 src="https://www.svgrepo.com/show/355037/google.svg"
@@ -98,13 +120,13 @@ const Register = () => {
               Login dengan Google
             </button>
           </form>
-
-          <img
-            src={BubbleKiri}
-            alt="Bubble kanan bawah"
-            className="fixed right-0 bottom-0 w-[200px] object-contain z-10"
-          />
         </div>
+
+        <img
+          src={BubbleKiri}
+          alt="Bubble"
+          className="hidden md:block fixed right-0 bottom-0 w-[200px]"
+        />
       </div>
     </div>
   );
