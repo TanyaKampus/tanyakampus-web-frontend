@@ -26,10 +26,7 @@ const Login = () => {
       if (res?.success) {
         localStorage.setItem("user", JSON.stringify(res.data));
         toastSuccess("Login Berhasil!")
-        setTimeout(() => {
           navigate("/");
-        }, 1500)
-
         return;
       }
     } catch (err: any) {

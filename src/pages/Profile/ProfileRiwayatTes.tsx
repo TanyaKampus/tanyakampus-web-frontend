@@ -103,7 +103,7 @@ const ProfileRiwayatTes = () => {
         status: it.status_quiz,
         date,
         majors,
-        waitingCount: 0,
+        waitingCount: it.hasilKampus?.length ?? 0,
         quiz_id: it.quiz.quiz_id,
       };
     });
@@ -136,7 +136,7 @@ const ProfileRiwayatTes = () => {
               key={item.riwayat_id}
               date={item.date}
               majors={item.majors}
-              waitingCount={item.waitingCount}
+              waitingCount={Number(item.waitingCount)}
               status={item.status}
               onView={() =>
                 navigate(
