@@ -135,7 +135,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           </div>
         ) : (
           <div className="flex flex-col space-y-3">
-            <Button label="Daftar" variant="solid-light" />
+            <Button label="Daftar" variant="solid-light" onClick={() => navigate('/daftar')}/>
             <Button label="Masuk" variant="outline" onClick={onLoginClick} />
           </div>
         )}
