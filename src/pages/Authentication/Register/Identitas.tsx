@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import ButtonRg from "@/assets/images/Button.png";
 import BubbleKanan from "@/assets/images/Bubblekn.png";
 import BubbleKiri from "@/assets/images/Bubblekr.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registerService } from "@/services/auth.service";
 import { toastError, toastSuccess } from "@/components/Toast";
